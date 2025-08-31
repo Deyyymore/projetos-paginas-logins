@@ -1,0 +1,175 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Login Bag Form</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&display=swap" rel="stylesheet">
+  <style>
+    :root{ --bg:#5867ff; --panel:#ffffff; --text:#0f172a; --muted:#6b7280; --accent:#5867ff; --ring:#c7d2fe; --radius:16px }
+    *{box-sizing:border-box}
+    html,body{height:100%}
+    body{
+      margin:0; font-family:"Poppins",system-ui,Segoe UI,Roboto,Arial,sans-serif;
+      background:var(--bg); color:var(--text); display:grid; place-items:center;
+    }
+    .section{ width:min(1200px,96vw) }
+    .title{ color:#fff; text-align:center; font-size:clamp(24px,3.2vw,42px); font-weight:700; margin:22px 0 }
+    .panel{
+      background:var(--panel); border-radius:24px; box-shadow:0 26px 80px rgba(0,0,0,.35);
+      display:grid; grid-template-columns:1fr 1.2fr; gap:clamp(10px,3vw,30px);
+      padding:clamp(10px,2.5vw,24px); position:relative; overflow:hidden;
+    }
+    .close{
+      position:absolute; right:18px; top:14px; width:34px; height:34px; border-radius:50%;
+      background:#eef2ff; color:#111827; display:grid; place-items:center;
+      font-weight:700; cursor:pointer; user-select:none;
+    }
+    .close:hover{ filter:brightness(.95) }
+
+    /* Lado esquerdo: personagem + glow */
+    .left{ display:grid; place-items:end center; padding:clamp(6px,2vw,10px) 0 }
+    .left .person{ position:relative }
+    .left .bubble{
+      position:absolute; right:-40px; bottom:-40px; width:360px; height:360px; border-radius:50%;
+      filter:blur(8px); background:radial-gradient(closest-side,rgba(255,255,255,.9),rgba(255,255,255,.2));
+      transform:rotate(-20deg);
+    }
+    .left svg{ width:min(340px,42vw); height:auto; filter:drop-shadow(0 10px 22px rgba(0,0,0,.25)) }
+
+    /* Lado direito: formulário */
+    .right{ align-self:center }
+    .card{ background:#fff; border-radius:18px; box-shadow:0 16px 40px rgba(0,0,0,.18); padding:clamp(14px,2.6vw,26px) }
+    .card h2{ margin:4px 0 2px; text-align:center; font-size:clamp(22px,2.6vw,32px); font-weight:700 }
+    .card p.desc{ text-align:center; margin:0 0 16px; color:var(--muted) }
+    label{ display:block; font-weight:600; font-size:13px; color:var(--muted); margin:6px 2px }
+    .control{ position:relative }
+    .control svg{ position:absolute; left:12px; top:50%; transform:translateY(-50%); width:18px; height:18px; opacity:.6 }
+    input{
+      width:100%; border:1.5px solid #e5e7eb; border-radius:12px; outline:none;
+      padding:12px 14px 12px 40px; font-size:16px; transition:border-color .2s, box-shadow .2s;
+    }
+    input:focus{ border-color:var(--accent); box-shadow:0 0 0 4px var(--ring) }
+    .row{ display:flex; gap:12px }
+    .row>.col{ flex:1 }
+    .actions{ display:flex; justify-content:space-between; align-items:center; margin-top:12px }
+    .btn{
+      appearance:none; border:0; border-radius:12px; padding:12px 18px;
+      background:var(--accent); color:#fff; font-weight:700; cursor:pointer;
+      box-shadow:0 12px 28px rgba(88,103,255,.35);
+    }
+    .btn:hover{ filter:brightness(.95) }
+    .note{ font-size:12px; color:var(--muted) }
+    .powered{ text-align:right; font-size:11px; color:#9ca3af; margin-top:8px }
+
+    @media (max-width:900px){ .panel{ grid-template-columns:1fr } .left{ display:none } }
+  </style>
+</head>
+<body>
+  <main class="section" role="main">
+    <h1 class="title">Login Bag Form</h1>
+
+    <div class="panel" aria-label="Bloco de registro">
+      <div class="close" title="Fechar">×</div>
+
+      <!-- LADO ESQUERDO (personagem) -->
+      <aside class="left" aria-hidden="true">
+        <div class="person">
+          <div class="bubble"></div>
+          <!-- Substitua por PNG/SVG do vídeo se quiser -->
+          <svg viewBox="0 0 256 256" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Personagem">
+            <defs>
+              <linearGradient id="g" x1="0" x2="1" y1="0" y2="1">
+                <stop offset="0" stop-color="#ffd9a8"/><stop offset="1" stop-color="#f7b072"/>
+              </linearGradient>
+            </defs>
+            <rect x="92" y="100" width="72" height="110" rx="18" fill="#1f2937"/>
+            <circle cx="128" cy="68" r="30" fill="url(#g)"/>
+            <rect x="72" y="140" width="36" height="60" rx="10" fill="#9ca3af"/>
+            <rect x="148" y="140" width="36" height="60" rx="10" fill="#9ca3af"/>
+            <rect x="84" y="210" width="28" height="14" rx="7" fill="#fff"/>
+            <rect x="144" y="210" width="28" height="14" rx="7" fill="#fff"/>
+          </svg>
+        </div>
+      </aside>
+
+      <!-- LADO DIREITO (formulário) -->
+      <section class="right">
+        <div class="card">
+          <h2>Register now</h2>
+          <p class="desc">Secure your spot in our upcoming live webinar</p>
+
+          <form id="registerForm" novalidate>
+            <div class="row">
+              <div class="col">
+                <label for="name">What's your name? *</label>
+                <div class="control">
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5.121 17.804A9 9 0 1118 20H6a3 3 0 01-.879-2.196z"/></svg>
+                  <input id="name" name="name" type="text" placeholder="Name" required />
+                </div>
+              </div>
+              <div class="col">
+                <label for="surname">Surname *</label>
+                <div class="control">
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5.121 17.804A9 9 0 1118 20H6a3 3 0 01-.879-2.196z"/></svg>
+                  <input id="surname" name="surname" type="text" placeholder="Surname" required />
+                </div>
+              </div>
+            </div>
+
+            <label for="email" style="margin-top:10px">Enter your email address *</label>
+            <div class="control">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 8l8 5 8-5M4 8v8h16V8"/></svg>
+              <input id="email" name="email" type="email" placeholder="Ex. yourname@email.com" required />
+            </div>
+
+            <div class="actions">
+              <span class="note">Campos marcados com * são obrigatórios.</span>
+              <button class="btn" type="submit">Register</button>
+            </div>
+          </form>
+
+          <div class="powered">Powered by Visme Forms</div>
+        </div>
+      </section>
+    </div>
+
+    <!-- Alternativa de incorporação (igual ao vídeo) -->
+    <!--
+    <div class="visme_d"
+      data-title="Registration Form"
+      data-url="SEU_ID_DO_PROJETO?fullPage=true"
+      data-domain="forms"
+      data-full-page="true"
+      data-min-height="100vh"
+      data-form-id="133190"></div>
+    <script src="https://static-bundles.visme.co/forms/vismeforms-embed.js"></script>
+    -->
+  </main>
+
+  <script>
+    // Botão de fechar (efeito visual)
+    document.querySelector('.close').addEventListener('click', () => {
+      document.querySelector('.panel').style.display = 'none';
+    });
+
+    // Validação simples + exemplo de envio
+    const form = document.getElementById('registerForm');
+    form.addEventListener('submit', (e) => {
+      e.preventDefault();
+      const data = Object.fromEntries(new FormData(form).entries());
+      if(!data.name?.trim() || !data.surname?.trim() || !data.email?.trim()){
+        alert('Preencha todos os campos obrigatórios.'); return;
+      }
+      if(!/^[^\\s@]+@[^\\s@]+\\.[^\\s@]+$/.test(data.email)){
+        alert('E-mail inválido.'); return;
+      }
+      // fetch('/api/register',{ method:'POST', headers:{'Content-Type':'application/json'}, body: JSON.stringify(data) })
+      alert('Inscrição enviada! Confira seu e-mail. ✅');
+      form.reset();
+    });
+  </script>
+</body>
+</html>

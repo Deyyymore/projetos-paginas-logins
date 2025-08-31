@@ -1,0 +1,206 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login Moderno</title>
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary: #6a11cb;
+            --secondary: #2575fc;
+            --accent: #ff6a00;
+            --bg: #f5f7fa;
+            --white: #fff;
+            --shadow: 0 4px 24px rgba(106,17,203,0.12);
+        }
+        * { box-sizing: border-box; }
+        body {
+            margin: 0;
+            font-family: 'Roboto', sans-serif;
+            background: var(--bg);
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        .login-container {
+            background: var(--white);
+            border-radius: 24px;
+            box-shadow: var(--shadow);
+            padding: 2.5rem 1.5rem 2rem 1.5rem;
+            width: 100%;
+            max-width: 350px;
+            display: flex;
+            flex-direction: column;
+            gap: 1.5rem;
+        }
+        .login-header {
+            text-align: center;
+            margin-bottom: 0.5rem;
+        }
+        .login-header h1 {
+            margin: 0;
+            font-size: 2rem;
+            font-weight: 700;
+            color: var(--primary);
+        }
+        .login-header p {
+            margin: 0.5rem 0 0 0;
+            color: #888;
+            font-size: 1rem;
+        }
+        .form-group {
+            position: relative;
+            margin-bottom: 1.2rem;
+        }
+        .form-group input {
+            width: 100%;
+            padding: 1rem 1rem 1rem 2.5rem;
+            border: 2px solid #eee;
+            border-radius: 12px;
+            font-size: 1rem;
+            outline: none;
+            background: #fafbfc;
+            transition: border-color 0.2s, box-shadow 0.2s;
+        }
+        .form-group input:focus {
+            border-color: var(--secondary);
+            box-shadow: 0 0 0 2px #2575fc33;
+        }
+        .form-group label {
+            position: absolute;
+            left: 2.5rem;
+            top: 1.1rem;
+            font-size: 1rem;
+            color: #aaa;
+            pointer-events: none;
+            transition: 0.2s;
+            background: transparent;
+        }
+        .form-group input:focus + label,
+        .form-group input:not(:placeholder-shown) + label {
+            top: -0.7rem;
+            left: 1rem;
+            font-size: 0.85rem;
+            color: var(--primary);
+            background: var(--white);
+            padding: 0 0.3rem;
+        }
+        .form-group .icon {
+            position: absolute;
+            left: 0.8rem;
+            top: 1.1rem;
+            font-size: 1.2rem;
+            color: #bbb;
+            transition: color 0.2s;
+        }
+        .form-group input:focus ~ .icon {
+            color: var(--secondary);
+        }
+        .login-btn {
+            width: 100%;
+            padding: 1rem;
+            border: none;
+            border-radius: 12px;
+            font-size: 1.1rem;
+            font-weight: 700;
+            color: var(--white);
+            background: linear-gradient(90deg, var(--primary), var(--secondary), var(--accent));
+            background-size: 200% 200%;
+            cursor: pointer;
+            box-shadow: 0 2px 8px #6a11cb33;
+            transition: background-position 0.3s, transform 0.1s;
+        }
+        .login-btn:active {
+            transform: scale(0.98);
+            background-position: right center;
+        }
+        .guest-btn {
+            margin-top: 0.5rem;
+            width: 100%;
+            padding: 0.9rem;
+            border: 2px solid var(--secondary);
+            border-radius: 12px;
+            font-size: 1rem;
+            font-weight: 500;
+            color: var(--secondary);
+            background: transparent;
+            cursor: pointer;
+            transition: background 0.2s, color 0.2s;
+        }
+        .guest-btn:hover {
+            background: var(--secondary);
+            color: var(--white);
+        }
+        .recaptcha {
+            display: flex;
+            justify-content: center;
+            margin: 0.5rem 0 0.2rem 0;
+        }
+        @media (max-width: 480px) {
+            .login-container {
+                padding: 1.5rem 0.5rem 1rem 0.5rem;
+                max-width: 98vw;
+            }
+            .login-header h1 {
+                font-size: 1.5rem;
+            }
+        }
+    </style>
+    <script src="https://www.google.com/recaptcha/api.js" async defer></script>
+</head>
+<body>
+    <div class="login-container">
+        <div class="login-header">
+            <h1>Entrar</h1>
+            <p>Bem-vindo! Faça login para continuar.</p>
+        </div>
+        <form id="loginForm" autocomplete="off">
+            <div class="form-group">
+                <input type="text" id="username" name="username" required placeholder=" " autocomplete="username">
+                <label for="username">Usuário ou Email</label>
+                <span class="icon">&#128100;</span>
+            </div>
+            <div class="form-group">
+                <input type="password" id="password" name="password" required placeholder=" " autocomplete="current-password">
+                <label for="password">Senha</label>
+                <span class="icon">&#128274;</span>
+            </div>
+            <div class="recaptcha">
+                <div class="g-recaptcha" data-sitekey="6LeIxAcTAAAAAJcZVRqyHh71UMIEGNQ_MXjiZKhI"></div>
+            </div>
+            <button type="submit" class="login-btn">Login</button>
+        </form>
+        <button class="guest-btn" onclick="continueAsGuest()">Continuar como convidado</button>
+    </div>
+    <script>
+        // Microinterações: animação sutil ao focar nos campos
+        document.querySelectorAll('.form-group input').forEach(input => {
+            input.addEventListener('focus', function() {
+                this.parentElement.classList.add('focused');
+            });
+            input.addEventListener('blur', function() {
+                this.parentElement.classList.remove('focused');
+            });
+        });
+
+        // Simulação de envio de formulário com recaptcha
+        document.getElementById('loginForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            var response = grecaptcha.getResponse();
+            if (!response) {
+                alert('Por favor, complete o reCAPTCHA.');
+                return;
+            }
+            // Aqui você pode adicionar a lógica de autenticação
+            alert('Login efetuado com sucesso!');
+        });
+
+        function continueAsGuest() {
+            alert('Entrando como convidado...');
+            // Redirecione ou faça a lógica de convidado aqui
+        }
+    </script>
+</body>
+</html>

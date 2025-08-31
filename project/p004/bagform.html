@@ -1,0 +1,243 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Login Bag Form</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&display=swap" rel="stylesheet">
+  <style>
+    :root{
+      --bg-1:#5b65ff; /* violeta azulado do vídeo */
+      --bg-2:#6f79ff;
+      --card:#ffffff;
+      --text:#0f172a;
+      --muted:#6b7280;
+      --primary:#111827;
+      --ring:#c7d2fe;
+      --accent:#5b65ff;
+      --radius:16px;
+    }
+
+    *{box-sizing:border-box}
+    html,body{height:100%}
+    body{
+      margin:0; font-family:"Poppins",system-ui,Segoe UI,Roboto,Arial,sans-serif;
+      background: linear-gradient(160deg,var(--bg-1),var(--bg-2));
+      color:var(--text);
+    }
+
+    .wrap{
+      min-height:100vh;
+      display:grid; place-items:center;
+      padding: 32px 18px;
+    }
+
+    .hero{
+      width:min(1100px, 96vw);
+      background:transparent;
+    }
+
+    .panel{
+      background: var(--card);
+      border-radius: var(--radius);
+      box-shadow: 0 20px 60px rgba(0,0,0,.25);
+      padding: clamp(20px, 3.8vw, 40px);
+      display:grid; grid-template-columns: 1fr 1.3fr; gap: clamp(14px, 3vw, 32px);
+      position:relative; overflow:hidden;
+    }
+
+    /* Person/mascot area */
+    .mascot{
+      display:grid; place-items:end center; position:relative;
+    }
+    .mascot .bubble{
+      position:absolute; inset:auto -50px -80px auto; width:340px; height:340px; border-radius:50%;
+      background: radial-gradient(closest-side, rgba(255,255,255,.9), rgba(255,255,255,.25));
+      filter: blur(6px); transform: rotate(-20deg);
+    }
+    .mascot svg{
+      width:min(340px, 38vw); height:auto; z-index:1; filter: drop-shadow(0 10px 20px rgba(0,0,0,.35));
+    }
+
+    /* Form area */
+    .form{
+      align-self:center;
+    }
+    .form header{
+      text-align:center; margin-bottom:22px; color:#fff;
+    }
+    .form h1{ font-size: clamp(22px, 3.2vw, 36px); margin:0 0 6px; font-weight:700 }
+    .form p{ margin:0; opacity:.9 }
+
+    .card{
+      background: var(--card);
+      border-radius: 20px;
+      padding: clamp(14px, 2.6vw, 24px);
+      box-shadow: 0 16px 40px rgba(0,0,0,.25);
+    }
+
+    .row{ display:flex; gap:12px; }
+    .row > .field{ flex:1 }
+
+    label{ display:block; font-weight:600; font-size:13px; color:var(--muted); margin: 6px 2px }
+
+    .control{
+      position:relative;
+    }
+    .control svg{ position:absolute; left:12px; top:50%; transform:translateY(-50%); width:18px; height:18px; opacity:.6 }
+    input{
+      width:100%; border:1.5px solid #e5e7eb; border-radius:12px; outline:none;
+      padding:12px 14px 12px 40px; font-size:16px; transition: box-shadow .2s ease, border-color .2s ease;
+      background:#fff;
+    }
+    input:focus{ border-color:var(--accent); box-shadow: 0 0 0 4px var(--ring) }
+
+    .actions{ display:flex; align-items:center; justify-content:space-between; gap:14px; margin-top:14px }
+    .btn{
+      appearance:none; -webkit-appearance:none; cursor:pointer;
+      border:0; border-radius:12px; padding:12px 18px; font-weight:700; font-size:16px;
+      background:var(--accent); color:#fff; letter-spacing:.2px;
+      box-shadow: 0 12px 28px rgba(91,101,255,.36);
+      transition: transform .12s ease, box-shadow .22s ease, filter .2s ease;
+    }
+    .btn:hover{ transform: translateY(-1px); box-shadow:0 18px 36px rgba(91,101,255,.45) }
+
+    .note{ font-size:12px; color:var(--muted) }
+
+    /* toast */
+    .toast{ position: fixed; left:50%; bottom:24px; transform: translateX(-50%) translateY(20px); opacity:0; background:#111827; color:#fff; padding:12px 16px; border-radius:10px; box-shadow:0 10px 30px rgba(0,0,0,.35); transition: .35s ease; z-index:99 }
+    .toast.show{ opacity:1; transform: translateX(-50%) translateY(0) }
+
+    /* Responsive */
+    @media (max-width: 900px) {
+      .panel{ grid-template-columns: 1fr; }
+      .mascot{ display:none }
+      .form header{ margin-top: 8px }
+    }
+  </style>
+</head>
+<body>
+  <div class="wrap">
+    <section class="hero">
+      <div class="form" aria-label="Formulário de registro">
+        <header>
+          <h1>Register now</h1>
+          <p>Secure your spot in our upcoming live webinar</p>
+        </header>
+
+        <div class="panel">
+          <!-- Mascote/ilustração no lado esquerdo -->
+          <aside class="mascot" aria-hidden="true">
+            <div class="bubble"></div>
+            <!-- Backpack SVG simples -->
+            <svg viewBox="0 0 256 256" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Backpack">
+              <defs>
+                <linearGradient id="g" x1="0" x2="1" y1="0" y2="1">
+                  <stop offset="0" stop-color="#ffb76b"/>
+                  <stop offset="1" stop-color="#ff7f50"/>
+                </linearGradient>
+              </defs>
+              <rect x="52" y="40" width="152" height="176" rx="40" fill="url(#g)"/>
+              <rect x="84" y="24" width="88" height="50" rx="20" fill="#f7e9d7"/>
+              <rect x="76" y="104" width="104" height="72" rx="12" fill="#fff"/>
+              <rect x="90" y="118" width="76" height="8" rx="4" fill="#e5e7eb"/>
+              <rect x="90" y="140" width="76" height="8" rx="4" fill="#e5e7eb"/>
+              <circle cx="128" cy="198" r="10" fill="#915b2f"/>
+              <path d="M52 96h152" stroke="#915b2f" stroke-width="8"/>
+            </svg>
+          </aside>
+
+          <!-- Card do formulário -->
+          <div class="card">
+            <form id="registerForm" novalidate>
+              <div class="row">
+                <div class="field">
+                  <label for="name">What's your name? *</label>
+                  <div class="control">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5.121 17.804A9 9 0 1118 20H6a3 3 0 01-.879-2.196z"/></svg>
+                    <input id="name" name="name" type="text" placeholder="Name" required />
+                  </div>
+                </div>
+                <div class="field">
+                  <label for="surname">&nbsp;</label>
+                  <div class="control">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5.121 17.804A9 9 0 1118 20H6a3 3 0 01-.879-2.196z"/></svg>
+                    <input id="surname" name="surname" type="text" placeholder="Surname" required />
+                  </div>
+                </div>
+              </div>
+
+              <div class="field" style="margin-top:10px">
+                <label for="email">Enter your email address *</label>
+                <div class="control">
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 8l8 5 8-5M4 8v8h16V8"/></svg>
+                  <input id="email" name="email" type="email" placeholder="Ex. yourname@email.com" required />
+                </div>
+              </div>
+
+              <div class="actions">
+                <span class="note">Campos marcados com * são obrigatórios.</span>
+                <button class="btn" type="submit">Register</button>
+              </div>
+            </form>
+          </div>
+        </div>
+
+        <p class="note" style="text-align:center; margin-top:12px">Dica: Posicione este bloco como pop-up em qualquer página.</p>
+      </div>
+    </section>
+  </div>
+
+  <div class="toast" id="toast" role="status" aria-live="polite">Inscrição enviada! Confira seu e‑mail. ✅</div>
+
+  <script>
+    // Validação simples + simulação de envio
+    const form = document.getElementById('registerForm');
+    const toast = document.getElementById('toast');
+
+    form.addEventListener('submit', async (e)=>{
+      e.preventDefault();
+      const data = Object.fromEntries(new FormData(form).entries());
+
+      // Regras simples
+      if(!data.name?.trim() || !data.surname?.trim() || !data.email?.trim()){
+        showToast('Preencha todos os campos obrigatórios.');
+        return;
+      }
+      if(!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(data.email)){
+        showToast('E-mail inválido.');
+        return;
+      }
+
+      // aqui você faria o fetch/POST para sua API ou serviço de e-mail
+      // await fetch('/api/register', { method:'POST', headers:{'Content-Type':'application/json'}, body: JSON.stringify(data) })
+
+      form.reset();
+      showToast('Inscrição enviada! Confira seu e‑mail. ✅');
+    });
+
+    function showToast(msg){
+      toast.textContent = msg;
+      toast.classList.add('show');
+      setTimeout(()=> toast.classList.remove('show'), 3000);
+    }
+  </script>
+
+  <!--
+    *** Alternativa (igual ao vídeo) — incorporar um formulário externo (Visme): ***
+
+    <div class="visme_d"
+         data-title="Registration Form"
+         data-url="SEU_ID_DO_PROJETO?fullPage=true"
+         data-domain="forms"
+         data-full-page="true"
+         data-min-height="100vh"
+         data-form-id="133190"></div>
+    <script src="https://static-bundles.visme.co/forms/vismeforms-embed.js"></script>
+
+    Substitua pelo seu serviço preferido (Typeform, Tally, Jotform, etc.).
+  -->
+</body>
+</html>

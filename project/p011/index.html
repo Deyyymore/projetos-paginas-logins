@@ -1,0 +1,1055 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width,initial-scale=1" />
+    <title>Maison Aurum — Boutique de Luxo</title>
+    <meta name="description" content="Maison Aurum — Joias, bolsas e relógios de luxo. Explore coleções exclusivas e compre com segurança." />
+    <meta property="og:title" content="Maison Aurum — Boutique de Luxo" />
+    <meta property="og:description" content="Joias, bolsas e relógios de luxo. Explore coleções exclusivas e compre com segurança." />
+    <meta property="og:image" content="https://picsum.photos/seed/maison/1200/630" />
+    <meta name="twitter:card" content="summary_large_image" />
+    <link rel="icon" href="data:;base64,iVBORw0KGgo=" />
+    <style>
+        /*
+            Maison Aurum — single-file luxury shop (mobile-first)
+            BEM, custom properties, accessible, performance-minded
+        */
+        :root{
+            --bg:#0b0b0c;
+            --surface:#0f0f10;
+            --text:#f7f5f0;
+            --muted:#bdb9b3;
+            --gold:#c9a227;
+            --accent:#e6d9a6;
+            --radius:12px;
+            --space-1:0.5rem;
+            --space-2:1rem;
+            --space-3:1.5rem;
+            --max-width:1200px;
+            --card-shadow:0 6px 18px rgba(0,0,0,0.6);
+        }
+        *{box-sizing:border-box}
+        html,body{height:100%}
+        body{
+            margin:0;
+            background:linear-gradient(180deg, var(--bg), #080808);
+            color:var(--text);
+            font-family: system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+            -webkit-font-smoothing:antialiased;
+            -moz-osx-font-smoothing:grayscale;
+            line-height:1.4;
+            -webkit-tap-highlight-color:transparent;
+        }
+        a{color:inherit;text-decoration:none}
+        img{max-width:100%;height:auto;display:block}
+        main{max-width:var(--max-width);margin:0 auto;padding:clamp(1rem,3vw,2rem)}
+        /* Header */
+        .header{
+            position:fixed;inset:0 0 auto 0;height:72px;padding:0 calc(1rem);display:flex;align-items:center;justify-content:space-between;
+            width:100%;z-index:50;background:linear-gradient(180deg,rgba(11,11,12,0.6),transparent);backdrop-filter:saturate(1.05) blur(6px);
+            border-bottom:1px solid rgba(255,255,255,0.02);
+        }
+        .header__inner{display:flex;gap:1rem;align-items:center;max-width:var(--max-width);width:100%;margin:0 auto;padding:0 1rem}
+        .brand{display:flex;align-items:center;gap:.6rem}
+        .brand__logo{width:44px;height:44px;display:inline-grid;place-items:center;background:linear-gradient(135deg,var(--gold),#f0e7ae);border-radius:8px;box-shadow:var(--card-shadow)}
+        .brand__name{font-family:Georgia,"Times New Roman",serif;font-size:1.05rem;color:var(--text);letter-spacing:.04em}
+        .nav{display:none;gap:1.2rem;margin-left:1.2rem}
+        .nav a{color:var(--muted);font-size:.95rem}
+        .header__actions{display:flex;gap:.6rem;align-items:center;margin-left:auto}
+        .btn{background:linear-gradient(90deg, rgba(201,162,39,0.12), rgba(201,162,39,0.08));border:1px solid rgba(201,162,39,0.18);color:var(--text);padding:.55rem .8rem;border-radius:10px;font-weight:600;cursor:pointer}
+        .btn--icon{background:transparent;border:none;padding:.4rem;border-radius:8px;color:var(--text)}
+        .badge{background:var(--gold);color:#111;padding:2px 6px;border-radius:999px;font-weight:700;font-size:.75rem}
+        .sr-only{position:absolute!important;width:1px;height:1px;padding:0;margin:-1px;overflow:hidden;clip:rect(0,0,0,0);white-space:nowrap;border:0}
+        /* Hero */
+        .hero{margin-top:84px;border-radius:14px;overflow:hidden;position:relative;display:grid;align-items:center;min-height:360px}
+        .hero__media{position:absolute;inset:0;background-image:url('https://picsum.photos/seed/hero/1400/800');background-size:cover;background-position:center;transform:translateZ(0);will-change:transform}
+        .hero__overlay{position:absolute;inset:0;background:linear-gradient(180deg,rgba(0,0,0,0.35),rgba(0,0,0,0.6))}
+        .hero__content{position:relative;z-index:2;padding:clamp(1rem,4vw,2.5rem);max-width:780px}
+        .hero h1{font-family:Georgia,"Times New Roman",serif;font-size:clamp(1.6rem,4.6vw,2.8rem);margin:0;color:var(--text);letter-spacing:.02em}
+        .hero p{color:var(--muted);margin:.6rem 0 1rem}
+        .btn--primary{background:linear-gradient(90deg,var(--gold),#f0e7ae);color:#0b0b0c;border:none;padding:.75rem 1.1rem;border-radius:10px;box-shadow:0 6px 20px rgba(201,162,39,0.12)}
+        /* Collections */
+        .collections{display:grid;gap:1rem;margin-top:1.25rem;grid-template-columns:repeat(1,1fr)}
+        .collection-card{background:linear-gradient(180deg,rgba(255,255,255,0.02),rgba(255,255,255,0.01));padding:1rem;border-radius:12px;display:flex;gap:1rem;align-items:center;box-shadow:var(--card-shadow)}
+        .collection-card__img{width:110px;height:110px;border-radius:10px;overflow:hidden;flex:0 0 110px}
+        .collection-card__title{font-family:Georgia,"Times New Roman",serif;font-size:1.05rem;color:var(--text)}
+        .collection-card__link{color:var(--gold);font-weight:700}
+        /* Layout: sidebar + grid */
+        .shop{display:grid;gap:1rem;margin-top:1rem}
+        .shop__controls{display:flex;gap:.75rem;align-items:center;flex-wrap:wrap}
+        .filter{background:linear-gradient(180deg,rgba(255,255,255,0.02),transparent);padding:.9rem;border-radius:12px}
+        .filter__title{font-weight:700;margin:0 0 .5rem;color:var(--muted);font-size:.9rem}
+        .filters-panel{display:flex;gap:1rem;flex-direction:column}
+        .grid{display:grid;grid-template-columns:repeat(2,1fr);gap:1rem;margin-top:1rem}
+        .product-card{background:linear-gradient(180deg,rgba(255,255,255,0.02),transparent);border-radius:12px;overflow:hidden;position:relative;padding:0.6rem;cursor:pointer;transition:transform .28s,var(--shadow) .28s}
+        .product-card:hover{transform:translateY(-6px)}
+        .product-card__media{aspect-ratio:1/1.05;border-radius:8px;overflow:hidden;position:relative}
+        .product-card__media img{width:100%;height:100%;object-fit:cover;display:block;transition:opacity .25s}
+        .product-card__badge{position:absolute;top:.6rem;left:.6rem;background:rgba(0,0,0,0.6);padding:6px 8px;border-radius:999px;font-weight:700;color:var(--gold);font-size:.8rem}
+        .product-card__body{padding:.6rem}
+        .product-card__name{font-weight:700;margin:0 0 .25rem}
+        .product-card__meta{display:flex;justify-content:space-between;align-items:center;gap:.5rem}
+        .product-card__price{color:var(--gold);font-weight:800}
+        .icon-btn{background:transparent;border:none;color:var(--muted);cursor:pointer;padding:.3rem;border-radius:8px}
+        .product-card__controls{display:flex;gap:.4rem;align-items:center}
+        /* modal/drawer styles */
+        .backdrop{position:fixed;inset:0;background:rgba(2,2,2,0.6);display:none;align-items:center;justify-content:center;z-index:60}
+        .backdrop.is-open{display:flex}
+        .product-modal{background:var(--surface);color:var(--text);border-radius:12px;max-width:980px;width:calc(100% - 2rem);max-height:90vh;overflow:auto;padding:1rem;display:grid;grid-template-columns:1fr;gap:1rem}
+        @media(min-width:900px){.product-modal{grid-template-columns:1fr 1fr}}
+        .gallery{display:flex;gap:.6rem;flex-direction:column}
+        .gallery__main{border-radius:10px;overflow:hidden}
+        .thumbs{display:flex;gap:.5rem;margin-top:.5rem;flex-wrap:wrap}
+        .thumbs button{width:56px;height:56px;border-radius:8px;overflow:hidden;border:none;background:transparent;padding:0;cursor:pointer}
+        .stock{font-weight:700}
+        .stock.in{color:#7af29a}
+        .stock.out{color:#ff7b7b}
+        .accordion{background:transparent;border-top:1px dashed rgba(255,255,255,0.03);padding-top:.6rem;margin-top:.6rem}
+        .drawer{position:fixed;top:0;right:0;bottom:0;width:360px;background:linear-gradient(180deg,var(--surface),#0c0c0c);box-shadow:-20px 0 60px rgba(0,0,0,0.6);transform:translateX(100%);transition:transform .34s;z-index:70;padding:1rem;display:flex;flex-direction:column;gap:.6rem}
+        .drawer.is-open{transform:translateX(0)}
+        .cart-list{overflow:auto;flex:1;display:flex;flex-direction:column;gap:.6rem;padding-right:.25rem}
+        .cart-item{display:flex;gap:.6rem;align-items:center}
+        .stepper{display:inline-flex;border:1px solid rgba(255,255,255,0.04);border-radius:8px;overflow:hidden}
+        .stepper button{background:transparent;border:none;padding:.4rem .55rem;color:var(--muted);cursor:pointer}
+        .coupon{display:flex;gap:.5rem}
+        .progress{height:10px;background:rgba(255,255,255,0.06);border-radius:999px;overflow:hidden}
+        .progress__bar{height:100%;background:linear-gradient(90deg,var(--gold),#f0e7ae);width:0%}
+        /* newsletter & footer */
+        .newsletter{display:flex;gap:.6rem;align-items:center;margin-top:1rem}
+        .newsletter input{flex:1;padding:.6rem;border-radius:10px;border:1px solid rgba(255,255,255,0.04);background:transparent;color:var(--text)}
+        footer{margin-top:2rem;padding-top:1rem;border-top:1px solid rgba(255,255,255,0.02);display:flex;flex-direction:column;gap:.8rem}
+        .footer__links{display:flex;gap:1rem;flex-wrap:wrap;color:var(--muted)}
+        /* toast */
+        .toast{position:fixed;right:1rem;bottom:1rem;background:#101010;border-radius:10px;padding:.6rem .9rem;color:var(--text);box-shadow:var(--card-shadow);opacity:0;transform:translateY(12px);transition:opacity .28s,transform .28s;z-index:90}
+        .toast.is-open{opacity:1;transform:none}
+        /* skeleton */
+        .skeleton{background:linear-gradient(90deg,#0e0e0e 8%, #121212 18%, #0e0e0e 33%);background-size:800% 104px;animation:shimmer 1.6s linear infinite;background-repeat:no-repeat;border-radius:8px}
+        @keyframes shimmer{0%{background-position:-800px 0}100%{background-position:800px 0}}
+        /* accessibility focus */
+        :focus{outline:3px solid rgba(201,162,39,0.18);outline-offset:2px}
+        /* responsive */
+        @media(min-width:860px){
+            .collections{grid-template-columns:repeat(3,1fr)}
+            .nav{display:flex}
+            .grid{grid-template-columns:repeat(3,1fr)}
+        }
+        @media(min-width:1100px){
+            .grid{grid-template-columns:repeat(4,1fr)}
+            main{padding:2rem}
+        }
+        /* reduced motion */
+        @media (prefers-reduced-motion: reduce){
+            *{transition:none!important;animation:none!important}
+        }
+    </style>
+</head>
+<body>
+    <header class="header" role="banner">
+        <div class="header__inner">
+            <div class="brand">
+                <div class="brand__logo" aria-hidden="true">
+                    <!-- inline svg monogram -->
+                    <svg width="28" height="28" viewBox="0 0 24 24" fill="none" aria-hidden="true" xmlns="http://www.w3.org/2000/svg">
+                        <rect width="24" height="24" rx="5" fill="#c9a227"/>
+                        <path d="M7 17V7h3l4 6v4" stroke="#0b0b0c" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round"/>
+                    </svg>
+                </div>
+                <div>
+                    <div class="brand__name">Maison Aurum</div>
+                    <div style="font-size:0.7rem;color:var(--muted)">Exclusividade & Arte</div>
+                </div>
+            </div>
+            <nav class="nav" role="navigation" aria-label="Principal">
+                <a href="#novidades">Novidades</a>
+                <a href="#colecoes">Coleções</a>
+                <a href="#joias">Joias</a>
+                <a href="#bolsas">Bolsas</a>
+                <a href="#relogios">Relógios</a>
+                <a href="#acessorios">Acessórios</a>
+                <a href="#contato">Contato</a>
+            </nav>
+            <div class="header__actions" role="group" aria-label="Ações">
+                <button class="btn--icon" id="searchBtn" aria-label="Buscar (Ctrl+K)"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M21 21l-4.35-4.35" stroke="currentColor" stroke-width="1.4" stroke-linecap="round"/><circle cx="11" cy="11" r="5" stroke="currentColor" stroke-width="1.4"/></svg></button>
+                <button class="btn--icon" id="wishlistBtn" aria-label="Wishlist"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M12 21s-7-4.4-9-7.2C-0.1 8 4.8 3 9.5 6c1.9 1.4 2.5 3 2.5 3s.6-1.6 2.5-3C19.2 3 24.1 8 21 13.8 19 16.6 12 21 12 21z" fill="currentColor"/></svg></button>
+                <button class="btn" id="cartBtn" aria-label="Abrir carrinho">
+                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M6 6h15l-1.5 9h-12L6 6z" stroke="currentColor" stroke-width="1.2" stroke-linejoin="round"/><circle cx="10" cy="20" r="1" fill="currentColor"/><circle cx="18" cy="20" r="1" fill="currentColor"/></svg>
+                    <span class="badge" id="cartBadge" aria-hidden="true">0</span>
+                </button>
+            </div>
+        </div>
+    </header>
+
+    <main id="main" role="main">
+        <!-- Hero -->
+        <section class="hero" aria-labelledby="hero-title">
+            <div class="hero__media" id="heroMedia" aria-hidden="true"></div>
+            <div class="hero__overlay" aria-hidden="true"></div>
+            <div class="hero__content">
+                <h1 id="hero-title">Coleção Aurora — Edição Limitada</h1>
+                <p>Peças selecionadas com pedras raras, design atemporal e responsabilidade artesanal.</p>
+                <div style="display:flex;gap:.6rem">
+                    <button class="btn btn--primary" id="exploreBtn">Explorar Coleção</button>
+                    <button class="btn btn--ghost" id="viewNew" style="border:none;background:transparent;color:var(--muted)">Novidades</button>
+                </div>
+            </div>
+        </section>
+
+        <!-- Collections -->
+        <section id="colecoes" style="margin-top:1rem">
+            <h2 style="font-family:Georgia,serif;margin:0 0 .6rem">Coleções em Destaque</h2>
+            <div class="collections" aria-hidden="false">
+                <article class="collection-card" tabindex="0">
+                    <div class="collection-card__img"><img src="https://picsum.photos/seed/colec1/600/600" alt="Coleção Aurora" loading="lazy" decoding="async"></div>
+                    <div>
+                        <div class="collection-card__title">Aurora — Joias</div>
+                        <div style="margin-top:.4rem;color:var(--muted)">Brilhantes e ouro 18k</div>
+                        <a class="collection-card__link" href="#joias" style="display:inline-block;margin-top:.6rem">Ver coleção →</a>
+                    </div>
+                </article>
+                <article class="collection-card" tabindex="0">
+                    <div class="collection-card__img"><img src="https://picsum.photos/seed/colec2/600/600" alt="Coleção Belmonte" loading="lazy" decoding="async"></div>
+                    <div>
+                        <div class="collection-card__title">Belmonte — Bolsas</div>
+                        <div style="margin-top:.4rem;color:var(--muted)">Couro italiano & costura manual</div>
+                        <a class="collection-card__link" href="#bolsas" style="display:inline-block;margin-top:.6rem">Ver coleção →</a>
+                    </div>
+                </article>
+                <article class="collection-card" tabindex="0">
+                    <div class="collection-card__img"><img src="https://picsum.photos/seed/colec3/600/600" alt="Coleção Tempus" loading="lazy" decoding="async"></div>
+                    <div>
+                        <div class="collection-card__title">Tempus — Relógios</div>
+                        <div style="margin-top:.4rem;color:var(--muted)">Mecanismos suíços</div>
+                        <a class="collection-card__link" href="#relogios" style="display:inline-block;margin-top:.6rem">Ver coleção →</a>
+                    </div>
+                </article>
+            </div>
+        </section>
+
+        <!-- Shop: Filters + Grid -->
+        <section class="shop" aria-labelledby="shop-title">
+            <h2 id="shop-title" style="font-family:Georgia,serif;margin:0">Catálogo</h2>
+
+            <div class="shop__controls" role="region" aria-label="Filtros e ordenação">
+                <div class="filter" style="display:flex;gap:.6rem;align-items:center">
+                    <label for="sort" class="filter__title">Ordenar</label>
+                    <select id="sort" aria-label="Ordenar por">
+                        <option value="relevance">Relevância</option>
+                        <option value="new">Novidades</option>
+                        <option value="price-asc">Preço ↑</option>
+                        <option value="price-desc">Preço ↓</option>
+                    </select>
+                </div>
+                <div class="filter" style="flex:1;display:flex;gap:.5rem;align-items:center">
+                    <label for="search" class="filter__title sr-only">Buscar produtos</label>
+                    <input id="search" placeholder="Buscar produtos..." style="flex:1;padding:.5rem;border-radius:8px;border:1px solid rgba(255,255,255,0.03);background:transparent;color:var(--text)" />
+                </div>
+                <div>
+                    <button class="btn" id="openFilters" aria-expanded="false">Filtros</button>
+                </div>
+            </div>
+
+            <div style="display:grid;gap:1rem;grid-template-columns:1fr" aria-hidden="false">
+                <div id="filtersPanel" class="filters-panel" style="display:none">
+                    <div class="filter" id="filterCategory">
+                        <div class="filter__title">Categoria</div>
+                        <select id="categorySelect" aria-label="Filtrar por categoria">
+                            <option value="">Todas</option>
+                        </select>
+                    </div>
+                    <div class="filter" id="filterPrice">
+                        <div class="filter__title">Preço (R$)</div>
+                        <div style="display:flex;gap:.5rem;align-items:center">
+                            <input type="range" id="priceRange" min="0" max="20000" value="20000" />
+                            <div id="priceVal" style="min-width:120px;text-align:right;color:var(--muted)">Até R$ 20.000</div>
+                        </div>
+                    </div>
+                    <div class="filter" id="filterColor">
+                        <div class="filter__title">Cor</div>
+                        <div id="colorsWrap" style="display:flex;gap:.4rem;flex-wrap:wrap"></div>
+                    </div>
+                    <div class="filter" id="filterMaterial">
+                        <div class="filter__title">Material</div>
+                        <div id="materialsWrap" style="display:flex;gap:.4rem;flex-wrap:wrap"></div>
+                    </div>
+                    <div style="display:flex;gap:.5rem">
+                        <button class="btn" id="applyFilters">Aplicar</button>
+                        <button class="btn btn--ghost" id="clearFilters" style="background:transparent;border:1px solid rgba(255,255,255,0.03)">Limpar</button>
+                    </div>
+                </div>
+
+                <div>
+                    <div id="gridWrap">
+                        <!-- skeleton while loading -->
+                        <div id="skeletonGrid" style="display:grid;grid-template-columns:repeat(2,1fr);gap:1rem">
+                            <div class="skeleton" style="height:220px;border-radius:12px"></div>
+                            <div class="skeleton" style="height:220px;border-radius:12px"></div>
+                            <div class="skeleton" style="height:220px;border-radius:12px"></div>
+                            <div class="skeleton" style="height:220px;border-radius:12px"></div>
+                        </div>
+                        <div id="productsGrid" class="grid" aria-live="polite" style="display:none"></div>
+                        <div style="margin-top:.8rem;display:flex;justify-content:center">
+                            <button class="btn" id="loadMore" style="display:none">Carregar mais</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Institutional -->
+        <section style="margin-top:1.2rem;display:grid;gap:.8rem">
+            <div style="background:linear-gradient(90deg,rgba(255,255,255,0.02),transparent);padding:1rem;border-radius:12px">
+                <h3 style="margin:0;font-family:Georgia,serif">Assinatura de Autenticidade & Garantia</h3>
+                <p style="margin:.4rem 0;color:var(--muted)">Cada peça acompanha certificado de autenticidade e garantia de 2 anos contra defeitos de fabricação.</p>
+            </div>
+
+            <div style="display:flex;gap:1rem;flex-wrap:wrap;align-items:center">
+                <div style="display:flex;gap:1rem;align-items:center">
+                    <!-- press logos (svg inline) -->
+                    <svg width="100" height="28" viewBox="0 0 100 28" aria-hidden="true"><rect width="100" height="28" rx="4" fill="#222"/></svg>
+                    <svg width="100" height="28" viewBox="0 0 100 28" aria-hidden="true"><rect width="100" height="28" rx="4" fill="#222"/></svg>
+                    <svg width="100" height="28" viewBox="0 0 100 28" aria-hidden="true"><rect width="100" height="28" rx="4" fill="#222"/></svg>
+                </div>
+            </div>
+        </section>
+
+        <!-- Newsletter -->
+        <section style="margin-top:1rem">
+            <h3 style="font-family:Georgia,serif;margin:0">Assine nossa newsletter</h3>
+            <p style="margin:.4rem 0;color:var(--muted)">Receba pré-venda e convites exclusivos.</p>
+            <form id="newsletterForm" class="newsletter" aria-label="Assine a newsletter">
+                <label class="sr-only" for="newsletterEmail">E-mail</label>
+                <input id="newsletterEmail" type="email" placeholder="seu@email.com" required />
+                <button class="btn btn--primary" type="submit">Assinar</button>
+            </form>
+        </section>
+
+        <!-- Footer -->
+        <footer role="contentinfo">
+            <div class="footer__links">
+                <a href="#sobre">Sobre</a>
+                <a href="#atendimento">Atendimento</a>
+                <a href="#envio">Envio</a>
+                <a href="#politicas">Políticas</a>
+                <a href="#contato">Contato</a>
+            </div>
+            <div style="display:flex;justify-content:space-between;align-items:center">
+                <div style="color:var(--muted)">© Maison Aurum — Todos os direitos reservados</div>
+                <div style="display:flex;gap:.6rem">
+                    <a href="#" aria-label="Instagram" class="btn--icon"><svg width="18" height="18" viewBox="0 0 24 24" aria-hidden="true"><rect width="24" height="24" rx="4" fill="currentColor"/></svg></a>
+                    <a href="#" aria-label="Facebook" class="btn--icon"><svg width="18" height="18" viewBox="0 0 24 24" aria-hidden="true"><rect width="24" height="24" rx="4" fill="currentColor"/></svg></a>
+                </div>
+            </div>
+        </footer>
+    </main>
+
+    <!-- Backdrops / Modals -->
+    <div class="backdrop" id="backdrop" tabindex="-1" aria-hidden="true">
+        <div class="product-modal" role="dialog" aria-modal="true" aria-labelledby="modalTitle" id="productModal">
+            <!-- content injected via JS -->
+        </div>
+    </div>
+
+    <aside class="drawer" id="cartDrawer" aria-hidden="true" aria-label="Mini carrinho">
+        <div style="display:flex;justify-content:space-between;align-items:center">
+            <h3 style="margin:0">Carrinho</h3>
+            <button id="closeCart" class="btn--icon" aria-label="Fechar carrinho">✕</button>
+        </div>
+        <div class="cart-list" id="cartList" aria-live="polite"></div>
+        <div>
+            <div style="display:flex;justify-content:space-between;color:var(--muted)"><div>Subtotal</div><div id="subtotal">R$ 0,00</div></div>
+            <div style="display:flex;gap:.5rem;margin-top:.5rem">
+                <input id="coupon" placeholder="Cupom (ex: LUXO10)" style="flex:1;padding:.5rem;border-radius:8px;border:1px solid rgba(255,255,255,0.03);background:transparent;color:var(--text)" />
+                <button class="btn" id="applyCoupon">Aplicar</button>
+            </div>
+            <div style="margin-top:.6rem">
+                <div style="display:flex;justify-content:space-between;color:var(--muted);font-size:.9rem"><div>Frete grátis</div><div id="freeLeft">Faltam R$ 1.500,00</div></div>
+                <div class="progress" style="margin-top:.4rem"><div class="progress__bar" id="progressBar" style="width:0%"></div></div>
+            </div>
+            <div style="display:flex;gap:.5rem;margin-top:.8rem">
+                <button class="btn" id="continueShop">Continuar comprando</button>
+                <button class="btn btn--primary" id="checkoutBtn">Finalizar compra</button>
+            </div>
+        </div>
+    </aside>
+
+    <!-- Toast -->
+    <div id="toast" class="toast" role="status" aria-live="polite" aria-atomic="true"></div>
+
+    <!-- Products data (embedded) -->
+    <script type="application/json" id="products-data">
+    [
+        {"id":"p001","name":"Brincos Aurora","price":2490,"category":"Joias","material":"Ouro 18k","colors":["Gold","Black"],"images":["https://picsum.photos/seed/p001a/800/1000","https://picsum.photos/seed/p001b/800/1000"],"badge":"Novo","rating":4.8,"stock":5},
+        {"id":"p002","name":"Anel Eclipse","price":5590,"category":"Joias","material":"Ouro 18k","colors":["Gold"],"images":["https://picsum.photos/seed/p002a/800/1000","https://picsum.photos/seed/p002b/800/1000"],"badge":"Exclusivo","rating":4.9,"stock":2},
+        {"id":"p003","name":"Bolsa Belmonte M","price":12990,"category":"Bolsas","material":"Couro","colors":["Black","Brown"],"images":["https://picsum.photos/seed/p003a/800/1000","https://picsum.photos/seed/p003b/800/1000"],"rating":4.6,"stock":3},
+        {"id":"p004","name":"Clutch Belmonte","price":8990,"category":"Bolsas","material":"Couro","colors":["Red","Gold"],"images":["https://picsum.photos/seed/p004a/800/1000","https://picsum.photos/seed/p004b/800/1000"],"rating":4.3,"stock":6},
+        {"id":"p005","name":"Relógio Tempus Noir","price":17990,"category":"Relógios","material":"Aço","colors":["Black"],"images":["https://picsum.photos/seed/p005a/800/1000","https://picsum.photos/seed/p005b/800/1000"],"badge":"Novo","rating":5,"stock":1},
+        {"id":"p006","name":"Pulseira Lúmen","price":3490,"category":"Acessórios","material":"Couro","colors":["Brown"],"images":["https://picsum.photos/seed/p006a/800/1000","https://picsum.photos/seed/p006b/800/1000"],"rating":4.0,"stock":10},
+        {"id":"p007","name":"Colar Solaire","price":7990,"category":"Joias","material":"Ouro 18k","colors":["Gold"],"images":["https://picsum.photos/seed/p007a/800/1000","https://picsum.photos/seed/p007b/800/1000"],"rating":4.7,"stock":4},
+        {"id":"p008","name":"Carteira Slim","price":1290,"category":"Acessórios","material":"Couro","colors":["Black"],"images":["https://picsum.photos/seed/p008a/800/1000","https://picsum.photos/seed/p008b/800/1000"],"rating":4.1,"stock":12},
+        {"id":"p009","name":"Relógio Tempus Oro","price":21990,"category":"Relógios","material":"Ouro","colors":["Gold"],"images":["https://picsum.photos/seed/p009a/800/1000","https://picsum.photos/seed/p009b/800/1000"],"badge":"Exclusivo","rating":4.9,"stock":1},
+        {"id":"p010","name":"Brinco Minimal","price":1590,"category":"Joias","material":"Prata","colors":["Silver"],"images":["https://picsum.photos/seed/p010a/800/1000","https://picsum.photos/seed/p010b/800/1000"],"rating":3.9,"stock":0},
+        {"id":"p011","name":"Bolsa Atelier","price":9490,"category":"Bolsas","material":"Couro","colors":["Tan","Black"],"images":["https://picsum.photos/seed/p011a/800/1000","https://picsum.photos/seed/p011b/800/1000"],"rating":4.5,"stock":5},
+        {"id":"p012","name":"Cinto Époque","price":990,"category":"Acessórios","material":"Couro","colors":["Brown","Black"],"images":["https://picsum.photos/seed/p012a/800/1000","https://picsum.photos/seed/p012b/800/1000"],"rating":4.2,"stock":20}
+    ]
+    </script>
+
+    <!-- JSON-LD (schema.org) for hero product (p001) and breadcrumb -->
+    <script type="application/ld+json">
+    {
+        "@context":"https://schema.org",
+        "@type":"Product",
+        "name":"Brincos Aurora",
+        "image":["https://picsum.photos/seed/p001a/800/1000"],
+        "description":"Brincos Aurora em ouro 18k, edição limitada.",
+        "sku":"p001",
+        "mpn":"MAU-P001",
+        "brand":{"@type":"Brand","name":"Maison Aurum"},
+        "offers":{"@type":"Offer","priceCurrency":"BRL","price":"2490","availability":"https://schema.org/InStock"}
+    }
+    </script>
+    <script type="application/ld+json">
+    {"@context":"https://schema.org","@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","position":1,"name":"Home","item":"#"},{"@type":"ListItem","position":2,"name":"Coleções","item":"#colecoes"}]}
+    </script>
+
+    <script type="module">
+    /**
+     * Maison Aurum — main script
+     * Utilities, state: Cart, Wishlist, Filters
+     * Renders grid, modal, cart drawer.
+     */
+
+    // --- Utils ---
+    const qs = (s, el=document) => el.querySelector(s);
+    const qsa = (s, el=document) => Array.from(el.querySelectorAll(s));
+    const on = (el, ev, fn) => el.addEventListener(ev, fn);
+    const formatCurrencyBRL = n => new Intl.NumberFormat('pt-BR',{style:'currency',currency:'BRL'}).format(n);
+    const debounce = (fn, wait=300) => { let t; return (...args)=>{ clearTimeout(t); t=setTimeout(()=>fn(...args), wait); }; };
+
+    // --- Data load ---
+    const productsData = JSON.parse(qs('#products-data').textContent);
+    let PRODUCTS = productsData.slice(); // working copy
+
+    // --- State management ---
+    const Storage = {
+        cartKey:'lux.cart',
+        wishKey:'lux.wishlist',
+        filtersKey:'lux.filters'
+    };
+
+    const Cart = {
+        items: JSON.parse(localStorage.getItem(Storage.cartKey) || '[]'),
+        save(){ localStorage.setItem(Storage.cartKey, JSON.stringify(this.items)); renderCart(); updateCartBadge(); },
+        add(productId, qty=1){
+            const p = PRODUCTS.find(x=>x.id===productId);
+            if(!p) return;
+            const found = this.items.find(i=>i.id===productId);
+            if(found){ found.qty = Math.max(1, found.qty + qty); }
+            else this.items.push({id:p.id,name:p.name,price:p.price,qty});
+            this.save();
+            showToast(`${p.name} adicionado ao carrinho`);
+            flyToCartAnimation(productId);
+        },
+        remove(productId){
+            this.items = this.items.filter(i=>i.id!==productId);
+            this.save();
+        },
+        updateQty(productId, qty){
+            const it = this.items.find(i=>i.id===productId);
+            if(it){ it.qty = Math.max(1, qty); this.save(); }
+        },
+        clear(){ this.items=[]; this.save(); }
+    };
+
+    const Wishlist = {
+        items: JSON.parse(localStorage.getItem(Storage.wishKey) || '[]'),
+        save(){ localStorage.setItem(Storage.wishKey, JSON.stringify(this.items)); renderWishlistState(); },
+        toggle(id){
+            if(this.items.includes(id)) this.items = this.items.filter(x=>x!==id);
+            else this.items.push(id);
+            this.save();
+        },
+        has(id){ return this.items.includes(id); }
+    };
+
+    const Filters = {
+        state: JSON.parse(sessionStorage.getItem(Storage.filtersKey) || '{}'),
+        save(){ sessionStorage.setItem(Storage.filtersKey, JSON.stringify(this.state)); },
+        load(){ this.state = JSON.parse(sessionStorage.getItem(Storage.filtersKey) || '{}'); },
+        clear(){ this.state={}; this.save(); }
+    };
+
+    // --- DOM refs ---
+    const productsGrid = qs('#productsGrid');
+    const skeletonGrid = qs('#skeletonGrid');
+    const productModal = qs('#productModal');
+    const backdrop = qs('#backdrop');
+    const cartDrawer = qs('#cartDrawer');
+    const cartList = qs('#cartList');
+    const subtotalEl = qs('#subtotal');
+    const cartBadge = qs('#cartBadge');
+    const toastEl = qs('#toast');
+    const searchInput = qs('#search');
+    const sortSelect = qs('#sort');
+    const openFiltersBtn = qs('#openFilters');
+    const filtersPanel = qs('#filtersPanel');
+    const categorySelect = qs('#categorySelect');
+    const colorsWrap = qs('#colorsWrap');
+    const materialsWrap = qs('#materialsWrap');
+    const priceRange = qs('#priceRange');
+    const priceVal = qs('#priceVal');
+    const applyFiltersBtn = qs('#applyFilters');
+    const clearFiltersBtn = qs('#clearFilters');
+    const loadMoreBtn = qs('#loadMore');
+    const couponInput = qs('#coupon');
+    const applyCouponBtn = qs('#applyCoupon');
+    const progressBar = qs('#progressBar');
+    const freeLeft = qs('#freeLeft');
+
+    // --- Initial UI population & helpers ---
+    function unique(arr){ return Array.from(new Set(arr)); }
+
+    function buildFiltersFromProducts(){
+        const cats = unique(PRODUCTS.map(p=>p.category));
+        categorySelect.innerHTML = `<option value="">Todas</option>` + cats.map(c=>`<option value="${c}">${c}</option>`).join('');
+        const colors = unique(PRODUCTS.flatMap(p=>p.colors));
+        colorsWrap.innerHTML = colors.map(c=>`<button class="btn" data-color="${c}" type="button" aria-pressed="false" style="padding:.35rem .6rem">${c}</button>`).join('');
+        const materials = unique(PRODUCTS.map(p=>p.material));
+        materialsWrap.innerHTML = materials.map(m=>`<button class="btn" data-material="${m}" type="button" aria-pressed="false" style="padding:.35rem .6rem">${m}</button>`).join('');
+    }
+
+    function applyFilterCriteria(items){
+        const s = Filters.state || {};
+        let out = items.slice();
+        if(s.q) out = out.filter(p => p.name.toLowerCase().includes(s.q.toLowerCase()));
+        if(s.category) out = out.filter(p=>p.category===s.category);
+        if(s.color) out = out.filter(p=>p.colors.includes(s.color));
+        if(s.material) out = out.filter(p=>p.material===s.material);
+        if(s.priceMax) out = out.filter(p=>p.price <= Number(s.priceMax));
+        // sorting
+        if(s.sort === 'new') out = out.slice().sort((a,b)=> (b.badge === 'Novo') - (a.badge === 'Novo'));
+        if(s.sort === 'price-asc') out = out.slice().sort((a,b)=>a.price-b.price);
+        if(s.sort === 'price-desc') out = out.slice().sort((a,b)=>b.price-a.price);
+        return out;
+    }
+
+    // --- Rendering grid ---
+    let renderedCount = 0;
+    const PAGE_SIZE = 12;
+
+    function renderGrid(items){
+        productsGrid.innerHTML = '';
+        productsGrid.style.display = 'grid';
+        const subset = items.slice(0, PAGE_SIZE);
+        renderedCount = subset.length;
+        subset.forEach(p => {
+            const card = document.createElement('article');
+            card.className = 'product-card';
+            card.setAttribute('tabindex','0');
+            card.innerHTML = `
+                <div class="product-card__media" data-id="${p.id}">
+                    <img src="${p.images[0]}" alt="${p.name}" loading="lazy" decoding="async" data-second="${p.images[1]||p.images[0]}"/>
+                    ${p.badge?`<div class="product-card__badge">${p.badge}</div>`:''}
+                </div>
+                <div class="product-card__body">
+                    <div class="product-card__name">${p.name}</div>
+                    <div class="product-card__meta">
+                        <div class="product-card__price">${formatCurrencyBRL(p.price)}</div>
+                        <div class="product-card__controls">
+                            <button class="icon-btn add-btn" data-id="${p.id}" aria-label="Adicionar ${p.name}">＋</button>
+                            <button class="icon-btn wish-btn" data-id="${p.id}" aria-label="Favoritar ${p.name}">${Wishlist.has(p.id)?'♥':'♡'}</button>
+                        </div>
+                    </div>
+                </div>
+            `;
+            productsGrid.appendChild(card);
+        });
+        // show load more if more items
+        if(items.length > PAGE_SIZE){
+            loadMoreBtn.style.display = 'inline-block';
+        } else loadMoreBtn.style.display = 'none';
+    }
+
+    // --- product hover image swap (delegated) ---
+    on(productsGrid,'mouseover',e=>{
+        const img = e.target.closest('.product-card__media')?.querySelector('img');
+        if(img){ img.src = img.dataset.second; }
+    });
+    on(productsGrid,'mouseout',e=>{
+        const img = e.target.closest('.product-card__media')?.querySelector('img');
+        if(img){ img.src = img.getAttribute('src'); } // keep same (no precise swap back to original in this lightweight impl)
+    });
+
+    // --- Render cart ---
+    function renderCart(){
+        cartList.innerHTML = '';
+        if(Cart.items.length === 0){
+            cartList.innerHTML = '<div style="color:var(--muted)">Seu carrinho está vazio.</div>';
+        } else {
+            Cart.items.forEach(it=>{
+                const p = PRODUCTS.find(x=>x.id===it.id) || {};
+                const div = document.createElement('div');
+                div.className='cart-item';
+                div.innerHTML = `
+                    <img src="${p.images?.[0]||''}" alt="${p.name}" style="width:56px;height:56px;border-radius:8px;object-fit:cover"/>
+                    <div style="flex:1">
+                        <div style="font-weight:700">${p.name}</div>
+                        <div style="color:var(--muted);font-size:.9rem">${formatCurrencyBRL(p.price)}</div>
+                        <div style="margin-top:.4rem;display:flex;gap:.4rem;align-items:center">
+                            <div class="stepper" aria-label="Alterar quantidade">
+                                <button class="stepper-dec" data-id="${it.id}">−</button>
+                                <div style="padding:.4rem .6rem" aria-live="polite">${it.qty}</div>
+                                <button class="stepper-inc" data-id="${it.id}">＋</button>
+                            </div>
+                            <button class="btn--icon remove" data-id="${it.id}" aria-label="Remover">Remover</button>
+                        </div>
+                    </div>
+                `;
+                cartList.appendChild(div);
+            });
+        }
+        const sub = Cart.items.reduce((s,i)=>s + i.price * i.qty, 0);
+        subtotalEl.textContent = formatCurrencyBRL(sub);
+        updateProgress(sub);
+        updateCartBadge();
+    }
+
+    function updateCartBadge(){
+        const totalQty = Cart.items.reduce((s,i)=>s+i.qty,0);
+        cartBadge.textContent = totalQty;
+        cartBadge.setAttribute('aria-hidden', totalQty>0 ? 'false' : 'true');
+    }
+
+    function updateProgress(subtotal){
+        const goal = 1500;
+        const pct = Math.min(100, (subtotal / goal) * 100);
+        progressBar.style.width = pct + '%';
+        if(subtotal >= goal) freeLeft.textContent = 'Parabéns — frete grátis!';
+        else freeLeft.textContent = 'Faltam ' + formatCurrencyBRL(goal - subtotal) + ' para frete grátis';
+    }
+
+    // --- wishlist rendering state ---
+    function renderWishlistState(){
+        qsa('.wish-btn').forEach(btn=>{
+            btn.textContent = Wishlist.has(btn.dataset.id)?'♥':'♡';
+        });
+    }
+
+    // --- toast ---
+    let toastTimer;
+    function showToast(msg, timeout=2200){
+        toastEl.textContent = msg;
+        toastEl.classList.add('is-open');
+        clearTimeout(toastTimer);
+        toastTimer = setTimeout(()=>toastEl.classList.remove('is-open'), timeout);
+    }
+
+    // --- modal / product detail ---
+    let lastFocusedElement=null;
+    function openProductModal(id){
+        const p = PRODUCTS.find(x=>x.id===id);
+        if(!p) return;
+        lastFocusedElement = document.activeElement;
+        productModal.innerHTML = `
+            <div style="display:flex;gap:1rem;align-items:start">
+                <div class="gallery" style="flex:1">
+                    <div class="gallery__main"><img src="${p.images[0]}" alt="${p.name}" style="width:100%;height:auto;object-fit:cover"/></div>
+                    <div class="thumbs">${p.images.map((img, i)=>`<button data-img="${img}" aria-label="Imagem ${i+1}"><img src="${img}" alt="${p.name} thumb" style="width:100%;height:100%;object-fit:cover"/></button>`).join('')}</div>
+                </div>
+                <div style="flex:1;display:flex;flex-direction:column;gap:.6rem">
+                    <h2 id="modalTitle" style="margin:0">${p.name}</h2>
+                    <div style="color:var(--gold);font-weight:800">${formatCurrencyBRL(p.price)}</div>
+                    <div><strong>Material:</strong> ${p.material}</div>
+                    <div class="stock ${p.stock>0?'in':'out'}">${p.stock>0? 'Em estoque':'Fora de estoque'}</div>
+                    <div>
+                        <label><strong>Cor</strong></label>
+                        <div style="display:flex;gap:.4rem;margin-top:.4rem">${p.colors.map(c=>`<button class="btn" data-color="${c}" type="button">${c}</button>`).join('')}</div>
+                    </div>
+                    <div class="accordion">
+                        <button class="btn" id="toggleDesc" aria-expanded="false">Descrição</button>
+                        <div id="descPanel" style="display:none;color:var(--muted);margin-top:.5rem">${p.name} — peça única de luxo, confeccionada com atenção aos detalhes.</div>
+                        <div style="margin-top:.5rem">
+                            <button class="btn" id="addToCartModal">Adicionar ao carrinho</button>
+                            <button class="btn btn--ghost" id="buyNow">Comprar agora</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        `;
+        backdrop.classList.add('is-open');
+        backdrop.setAttribute('aria-hidden','false');
+        productModal.focus();
+        trapFocus(productModal);
+        // events inside modal
+        on(productModal,'click',e=>{
+            if(e.target.matches('.thumbs button')) {
+                const img = e.target.dataset.img;
+                qs('.gallery__main img', productModal).src = img;
+            }
+            if(e.target.id === 'toggleDesc'){
+                const panel = qs('#descPanel', productModal);
+                const expanded = e.target.getAttribute('aria-expanded') === 'true';
+                e.target.setAttribute('aria-expanded', String(!expanded));
+                panel.style.display = expanded ? 'none' : 'block';
+            }
+            if(e.target.id === 'addToCartModal'){
+                Cart.add(p.id,1);
+            }
+            if(e.target.id === 'buyNow'){
+                Cart.add(p.id,1);
+                openCheckout();
+            }
+        });
+    }
+    function closeProductModal(){
+        backdrop.classList.remove('is-open');
+        backdrop.setAttribute('aria-hidden','true');
+        releaseFocus();
+        if(lastFocusedElement) lastFocusedElement.focus();
+    }
+
+    // --- drawer open/close (cart) ---
+    function openCart(){
+        cartDrawer.classList.add('is-open');
+        cartDrawer.setAttribute('aria-hidden','false');
+        renderCart();
+        trapFocus(cartDrawer);
+    }
+    function closeCart(){
+        cartDrawer.classList.remove('is-open');
+        cartDrawer.setAttribute('aria-hidden','true');
+        releaseFocus();
+    }
+
+    // --- checkout simulated ---
+    function openCheckout(){
+        const dialog = document.createElement('div');
+        dialog.className='product-modal';
+        dialog.setAttribute('role','dialog');
+        dialog.setAttribute('aria-modal','true');
+        dialog.innerHTML = `
+            <h3>Simulação de Checkout</h3>
+            <form id="checkoutForm" style="display:grid;gap:.5rem">
+                <input name="name" placeholder="Nome completo" required />
+                <input name="email" type="email" placeholder="E-mail" required />
+                <input name="phone" placeholder="Telefone" />
+                <input name="address" placeholder="Endereço" required />
+                <input name="cep" placeholder="CEP" required />
+                <div style="display:flex;gap:.4rem;justify-content:flex-end">
+                    <button type="button" id="cancelCheckout" class="btn btn--ghost">Cancelar</button>
+                    <button type="submit" class="btn btn--primary">Finalizar (Simulado)</button>
+                </div>
+            </form>
+        `;
+        backdrop.classList.add('is-open');
+        backdrop.setAttribute('aria-hidden','false');
+        productModal.replaceWith(dialog);
+        // replace reference
+        window.currentDialog = dialog;
+        trapFocus(dialog);
+        dialog.querySelector('#cancelCheckout').addEventListener('click', ()=> { dialog.replaceWith(productModal); closeProductModal(); });
+        dialog.querySelector('#checkoutForm').addEventListener('submit', (e)=>{
+            e.preventDefault();
+            showToast('Checkout simulado concluído — obrigado!');
+            Cart.clear();
+            dialog.replaceWith(productModal);
+            closeProductModal();
+            closeCart();
+        });
+    }
+
+    // --- focus trap ---
+    let previousActive=null;
+    function trapFocus(container){
+        previousActive = document.activeElement;
+        const focusable = 'a[href], button, textarea, input, select, [tabindex]:not([tabindex="-1"])';
+        const elements = Array.from(container.querySelectorAll(focusable)).filter(el=>!el.hasAttribute('disabled'));
+        if(elements.length) elements[0].focus();
+        function keyListener(e){
+            if(e.key === 'Tab'){
+                const idx = elements.indexOf(document.activeElement);
+                if(e.shiftKey && idx===0){ elements[elements.length-1].focus(); e.preventDefault(); }
+                else if(!e.shiftKey && idx===elements.length-1){ elements[0].focus(); e.preventDefault(); }
+            }
+            if(e.key === 'Escape'){ closeProductModal(); closeCart(); backdrop.classList.remove('is-open'); }
+        }
+        container._trap = keyListener;
+        document.addEventListener('keydown', keyListener);
+    }
+    function releaseFocus(){
+        if(previousActive) previousActive.focus();
+        document.removeEventListener('keydown', (document._trap || (()=>{})));
+    }
+
+    // --- interactions & events ---
+    // initial render with skeleton
+    setTimeout(()=>{ // simulate load
+        skeletonGrid.style.display='none';
+        qs('#productsGrid').style.display='grid';
+        buildFiltersFromProducts();
+        loadFromSession();
+        renderAll();
+    }, 700);
+
+    function renderAll(){
+        const filtered = applyFilterCriteria(PRODUCTS);
+        renderGrid(filtered);
+        renderCart();
+        renderWishlistState();
+    }
+
+    // clicking product opens modal
+    on(productsGrid,'click', e=>{
+        const card = e.target.closest('.product-card');
+        if(!card) return;
+        const id = card.querySelector('.product-card__media')?.dataset.id || card.querySelector('.add-btn')?.dataset.id;
+        if(id) {
+            openProductModal(id);
+        }
+    });
+
+    // add & wishlist buttons delegated
+    on(productsGrid,'click', e=>{
+        if(e.target.matches('.add-btn')){
+            e.stopPropagation();
+            Cart.add(e.target.dataset.id,1);
+        }
+        if(e.target.matches('.wish-btn')){
+            e.stopPropagation();
+            Wishlist.toggle(e.target.dataset.id);
+            showToast('Atualizado na wishlist');
+            renderWishlistState();
+        }
+    });
+
+    // cart drawer buttons
+    qs('#cartBtn').addEventListener('click', openCart);
+    qs('#closeCart').addEventListener('click', closeCart);
+    qs('#continueShop').addEventListener('click', closeCart);
+
+    // cart list interactions (delegated)
+    on(cartList,'click', e=>{
+        if(e.target.matches('.stepper-inc')) Cart.updateQty(e.target.dataset.id, (Cart.items.find(i=>i.id===e.target.dataset.id)?.qty||1)+1);
+        if(e.target.matches('.stepper-dec')) Cart.updateQty(e.target.dataset.id, (Cart.items.find(i=>i.id===e.target.dataset.id)?.qty||1)-1);
+        if(e.target.matches('.remove')) Cart.remove(e.target.dataset.id);
+    });
+
+    // filters toggle
+    openFiltersBtn.addEventListener('click', ()=>{
+        const open = filtersPanel.style.display !== 'none';
+        filtersPanel.style.display = open ? 'none' : 'block';
+        openFiltersBtn.setAttribute('aria-expanded', String(!open));
+    });
+
+    // color/material selection
+    on(colorsWrap,'click', e=>{
+        const btn = e.target.closest('[data-color]');
+        if(!btn) return;
+        const val = btn.dataset.color;
+        Filters.state.color = Filters.state.color === val ? undefined : val;
+        Array.from(colorsWrap.children).forEach(b=>b.setAttribute('aria-pressed', b.dataset.color === Filters.state.color));
+        Filters.save();
+    });
+    on(materialsWrap,'click', e=>{
+        const btn = e.target.closest('[data-material]');
+        if(!btn) return;
+        const val = btn.dataset.material;
+        Filters.state.material = Filters.state.material === val ? undefined : val;
+        Array.from(materialsWrap.children).forEach(b=>b.setAttribute('aria-pressed', b.dataset.material === Filters.state.material));
+        Filters.save();
+    });
+
+    // apply/clear filters
+    applyFiltersBtn.addEventListener('click', ()=>{
+        Filters.state.category = categorySelect.value || undefined;
+        Filters.state.priceMax = priceRange.value || undefined;
+        Filters.state.sort = sortSelect.value || undefined;
+        Filters.save();
+        renderAll();
+    });
+    clearFiltersBtn.addEventListener('click', ()=>{
+        Filters.clear();
+        categorySelect.value = '';
+        priceRange.value = priceRange.max;
+        priceVal.textContent = 'Até R$ ' + priceRange.max;
+        buildFiltersFromProducts();
+        renderAll();
+    });
+
+    // price range
+    priceRange.addEventListener('input', e=>{
+        priceVal.textContent = 'Até ' + formatCurrencyBRL(Number(e.target.value));
+        Filters.state.priceMax = e.target.value;
+        Filters.save();
+    });
+
+    // search with debounce
+    searchInput.addEventListener('input', debounce((e)=>{
+        Filters.state.q = e.target.value || undefined;
+        Filters.save();
+        renderAll();
+    }, 350));
+
+    // sort
+    sortSelect.addEventListener('change', e=>{ Filters.state.sort = e.target.value; Filters.save(); renderAll(); });
+
+    // wishlist button in header
+    qs('#wishlistBtn').addEventListener('click', ()=>{ showToast('Wishlist (simulada)'); });
+
+    // load more (pagination) - minimal impl
+    loadMoreBtn.addEventListener('click', ()=>{
+        const filtered = applyFilterCriteria(PRODUCTS);
+        const next = filtered.slice(renderedCount, renderedCount + PAGE_SIZE);
+        next.forEach(p=>{
+            // reuse renderGrid logic for simplicity - append
+            const card = document.createElement('article');
+            card.className = 'product-card';
+            card.setAttribute('tabindex','0');
+            card.innerHTML = `
+                <div class="product-card__media" data-id="${p.id}">
+                    <img src="${p.images[0]}" alt="${p.name}" loading="lazy" decoding="async" data-second="${p.images[1]||p.images[0]}"/>
+                    ${p.badge?`<div class="product-card__badge">${p.badge}</div>`:''}
+                </div>
+                <div class="product-card__body">
+                    <div class="product-card__name">${p.name}</div>
+                    <div class="product-card__meta">
+                        <div class="product-card__price">${formatCurrencyBRL(p.price)}</div>
+                        <div class="product-card__controls">
+                            <button class="icon-btn add-btn" data-id="${p.id}" aria-label="Adicionar ${p.name}">＋</button>
+                            <button class="icon-btn wish-btn" data-id="${p.id}" aria-label="Favoritar ${p.name}">${Wishlist.has(p.id)?'♥':'♡'}</button>
+                        </div>
+                    </div>
+                </div>
+            `;
+            productsGrid.appendChild(card);
+        });
+        renderedCount += next.length;
+        if(filtered.length <= renderedCount) loadMoreBtn.style.display = 'none';
+    });
+
+    // coupon apply
+    applyCouponBtn.addEventListener('click', ()=>{
+        const c = couponInput.value.trim().toUpperCase();
+        const subtotal = Cart.items.reduce((s,i)=>s + i.price*i.qty,0);
+        if(c === 'LUXO10' && subtotal > 0){
+            const discount = subtotal * 0.10;
+            subtotalEl.textContent = formatCurrencyBRL(subtotal - discount);
+            showToast('Cupom aplicado: -10%');
+        } else {
+            showToast('Cupom inválido ou carrinho vazio');
+        }
+    });
+
+    // search overlay (Ctrl+K)
+    const searchBtn = qs('#searchBtn');
+    searchBtn.addEventListener('click', ()=>{ searchInput.focus(); });
+    document.addEventListener('keydown', e=>{
+        if((e.ctrlKey || e.metaKey) && e.key.toLowerCase() === 'k'){ e.preventDefault(); searchInput.focus(); }
+        if(e.key === 'Escape'){ closeProductModal(); closeCart(); backdrop.classList.remove('is-open'); }
+    });
+
+    // backdrop close
+    backdrop.addEventListener('click', (e)=>{
+        if(e.target === backdrop) closeProductModal();
+    });
+
+    // newsletter
+    qs('#newsletterForm').addEventListener('submit', e=>{
+        e.preventDefault();
+        const email = qs('#newsletterEmail').value;
+        if(!email || !email.includes('@')) { showToast('Insira um e-mail válido'); return; }
+        showToast('Inscrito com sucesso!');
+        qs('#newsletterEmail').value = '';
+    });
+
+    // header CTA
+    qs('#exploreBtn').addEventListener('click', ()=>{ window.location.hash = '#colecoes'; qs('#heroMedia').style.transform = 'translateY(-8px)'; setTimeout(()=>qs('#heroMedia').style.transform='translateY(0)',300); });
+
+    // wishlist persistence UI
+    function renderWishlistStateGlobal(){
+        renderWishlistState();
+        // header state could get update
+    }
+
+    // update on storage changes
+    window.addEventListener('storage', (e)=>{
+        if(e.key === Storage.cartKey) Cart.items = JSON.parse(e.newValue || '[]'), renderCart();
+        if(e.key === Storage.wishKey) Wishlist.items = JSON.parse(e.newValue || '[]'), renderWishlistStateGlobal();
+    });
+
+    // small animation: fly to cart (optional; disabled with reduced-motion)
+    function flyToCartAnimation(productId){
+        if(window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+        const img = qs(`.product-card[data-id="${productId}"] img`) || qs(`.product-card__media img`);
+        if(!img) return;
+        const fly = img.cloneNode(true);
+        const rect = img.getBoundingClientRect();
+        fly.style.position='fixed';
+        fly.style.left=rect.left+'px';
+        fly.style.top=rect.top+'px';
+        fly.style.width=rect.width+'px';
+        fly.style.height=rect.height+'px';
+        fly.style.zIndex=120;
+        fly.style.transition='transform .8s cubic-bezier(.2,.9,.2,1), opacity .8s';
+        document.body.appendChild(fly);
+        const cartRect = qs('#cartBtn').getBoundingClientRect();
+        requestAnimationFrame(()=> {
+            fly.style.transform = `translate(${cartRect.left - rect.left}px, ${cartRect.top - rect.top}px) scale(.2)`;
+            fly.style.opacity='0';
+        });
+        setTimeout(()=>fly.remove(),900);
+    }
+
+    // load filters from session
+    function loadFromSession(){
+        Filters.load();
+        if(Filters.state){
+            if(Filters.state.sort) sortSelect.value = Filters.state.sort;
+            if(Filters.state.q) searchInput.value = Filters.state.q;
+            if(Filters.state.priceMax) priceRange.value = Filters.state.priceMax;
+        }
+    }
+
+    // expose some for debug
+    window.MaisonAurum = {Cart,Wishlist,Filters,PRODUCTS,renderAll,formatCurrencyBRL};
+
+    // final render after initial build
+    renderAll();
+    </script>
+
+    <!-- Como editar/expandir o catálogo -->
+    <!--
+        Como editar/expandir o catálogo:
+
+        - Os produtos estão definidos no bloco <script type="application/json" id="products-data"> no topo do documento.
+        - Cada produto é um objeto com os campos:
+                id (string), name (string), price (number), category (string),
+                material (string), colors (array de strings),
+                images (array com pelo menos 2 URLs), badge (opcional string),
+                rating (0-5), stock (int)
+
+        - Para adicionar um novo produto, insira um novo objeto no array seguindo o mesmo formato.
+            Exemplo:
+                {
+                    "id":"p013",
+                    "name":"Novo Colar",
+                    "price":4990,
+                    "category":"Joias",
+                    "material":"Prata",
+                    "colors":["Silver"],
+                    "images":["https://picsum.photos/seed/p013a/800/1000","https://picsum.photos/seed/p013b/800/1000"],
+                    "badge":"Novo",
+                    "rating":4.5,
+                    "stock":8
+                }
+
+        - Para criar novas coleções visuais:
+            • Atualize a seção "Coleções em Destaque" (HTML) com imagens e links para âncoras (#joias, #bolsas, etc).
+            • Você pode também adicionar categorias diferentes no campo "category" dos produtos.
+
+        - Observações:
+            • Após editar o JSON, recarregue a página. O JavaScript reconstrói os filtros (categorias, cores, materiais) automaticamente.
+            • Filtros/ordenar/busca são mantidos em sessionStorage (chave lux.filters). O carrinho e wishlist persistem em localStorage (lux.cart, lux.wishlist).
+    -->
+</body>
+</html></div>

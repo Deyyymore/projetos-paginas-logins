@@ -1,0 +1,1482 @@
+<!DOCTYPE html>
+<html lang="pt-BR" class="">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Autenticação • Login/Criar Conta</title>
+    <meta name="description" content="Interface de autenticação moderna com Login, Cadastro, 2FA/OTP, reCAPTCHA e temas.">
+    <!-- <meta name="csrf-token" content="TOKEN_AQUI"> -->
+    <style>
+        :root {
+            --bg: #f3f6fa;
+            --surface: #fff;
+            --text: #222;
+            --muted: #6b7280;
+            --primary: #2563eb;
+            --success: #22c55e;
+            --warning: #f59e42;
+            --danger: #ef4444;
+            --ring: #2563eb33;
+            --space-1: 0.5rem;
+            --space-2: 1rem;
+            --space-3: 1.5rem;
+            --space-4: 2rem;
+            --radius: 1.1rem;
+            --card-maxw: 420px;
+            --card-pad: var(--space-4) var(--space-3);
+            --mesh1: radial-gradient(ellipse 60% 80% at 20% 10%, #a5b4fc 0%, transparent 70%);
+            --mesh2: radial-gradient(ellipse 40% 60% at 80% 80%, #fca5a5 0%, transparent 70%);
+            --mesh3: radial-gradient(ellipse 30% 40% at 60% 30%, #6ee7b7 0%, transparent 70%);
+            --mesh4: radial-gradient(ellipse 30% 30% at 80% 10%, #fcd34d 0%, transparent 70%);
+            --shadow: 0 4px 32px 0 rgba(30, 41, 59, 0.10);
+            --input-bg: #fff;
+            --input-border: #d1d5db;
+            --input-text: #222;
+            --input-placeholder: #9ca3af;
+            --input-focus: var(--primary);
+            --input-error: var(--danger);
+            --input-valid: var(--success);
+            --btn-grad: linear-gradient(90deg, #2563eb 0%, #6366f1 100%);
+            --btn-grad-dark: linear-gradient(90deg, #60a5fa 0%, #818cf8 100%);
+            --btn-text: #fff;
+            --btn-ghost-bg: transparent;
+            --btn-ghost-text: var(--primary);
+            --otp-bg: #f1f5f9;
+            --otp-border: #cbd5e1;
+            --otp-focus: var(--primary);
+            --pwd-meter-bg: #e5e7eb;
+            --pwd-meter-ok: var(--success);
+            --pwd-meter-warn: var(--warning);
+            --pwd-meter-bad: var(--danger);
+            --tab-underline: var(--primary);
+            --tab-bg: transparent;
+            --tab-text: var(--muted);
+            --tab-active-bg: transparent;
+            --tab-active-text: var(--primary);
+            --contrast-bg: #000 !important;
+            --contrast-text: #fff !important;
+            --contrast-ring: #fff !important;
+            --contrast-surface: #222 !important;
+            --transition: 0.18s cubic-bezier(.4,0,.2,1);
+        }
+        html.theme-dark {
+            --bg: #181c23;
+            --surface: rgba(30, 41, 59, 0.85);
+            --text: #f3f6fa;
+            --muted: #94a3b8;
+            --primary: #60a5fa;
+            --success: #22d3ee;
+            --warning: #fbbf24;
+            --danger: #f87171;
+            --ring: #60a5fa55;
+            --input-bg: #23272f;
+            --input-border: #334155;
+            --input-text: #f3f6fa;
+            --input-placeholder: #64748b;
+            --btn-grad: linear-gradient(90deg, #60a5fa 0%, #818cf8 100%);
+            --btn-grad-dark: linear-gradient(90deg, #2563eb 0%, #6366f1 100%);
+            --btn-text: #fff;
+            --btn-ghost-bg: transparent;
+            --btn-ghost-text: #60a5fa;
+            --otp-bg: #23272f;
+            --otp-border: #334155;
+            --pwd-meter-bg: #334155;
+            --pwd-meter-ok: #22d3ee;
+            --pwd-meter-warn: #fbbf24;
+            --pwd-meter-bad: #f87171;
+            --tab-underline: #60a5fa;
+            --tab-bg: transparent;
+            --tab-text: #64748b;
+            --tab-active-bg: transparent;
+            --tab-active-text: #60a5fa;
+            --shadow: 0 4px 32px 0 rgba(0,0,0,0.18);
+        }
+        html.theme-contrast {
+            --bg: var(--contrast-bg);
+            --surface: var(--contrast-surface);
+            --text: var(--contrast-text);
+            --muted: #fff;
+            --primary: #fff;
+            --ring: var(--contrast-ring);
+            --input-bg: #000;
+            --input-border: #fff;
+            --input-text: #fff;
+            --input-placeholder: #fff;
+            --btn-grad: linear-gradient(90deg, #fff 0%, #fff 100%);
+            --btn-text: #000;
+            --btn-ghost-bg: #fff;
+            --btn-ghost-text: #000;
+            --otp-bg: #000;
+            --otp-border: #fff;
+            --pwd-meter-bg: #fff;
+            --pwd-meter-ok: #fff;
+            --pwd-meter-warn: #fff;
+            --pwd-meter-bad: #fff;
+            --tab-underline: #fff;
+            --tab-bg: #000;
+            --tab-text: #fff;
+            --tab-active-bg: #fff;
+            --tab-active-text: #000;
+            --shadow: 0 0 0 3px #fff;
+        }
+        @media (max-width: 600px) {
+            :root { --card-maxw: 98vw; --card-pad: var(--space-3) var(--space-2);}
+        }
+        body {
+            min-height: 100vh;
+            margin: 0;
+            font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Arial, sans-serif;
+            background: var(--bg);
+            color: var(--text);
+            transition: background 0.4s, color 0.2s;
+            /* Mesh gradient para modo pessoal, degrade sóbrio para corporativo (JS ajusta) */
+            background-image: var(--mesh1), var(--mesh2), var(--mesh3), var(--mesh4);
+            background-size: cover;
+            background-repeat: no-repeat;
+            background-attachment: fixed;
+        }
+        body.corporate-bg {
+            background-image: linear-gradient(120deg, #1e293b 0%, #334155 100%);
+        }
+        main.auth {
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            padding: var(--space-3) 0;
+        }
+        .auth__card {
+            background: var(--surface);
+            backdrop-filter: blur(12px);
+            border-radius: var(--radius);
+            box-shadow: var(--shadow);
+            max-width: var(--card-maxw);
+            width: 100%;
+            margin: 0 auto;
+            padding: var(--card-pad);
+            border: 1px solid rgba(120,120,120,0.10);
+            border-top: 1.5px solid rgba(120,120,120,0.13);
+            border-bottom: 1.5px solid rgba(120,120,120,0.09);
+            background-clip: padding-box;
+            position: relative;
+            z-index: 1;
+            display: flex;
+            flex-direction: column;
+            gap: var(--space-2);
+        }
+        .brand {
+            display: flex;
+            align-items: center;
+            gap: var(--space-2);
+            margin-bottom: var(--space-2);
+            justify-content: space-between;
+        }
+        .brand__logo {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            width: 2.6rem;
+            height: 2.6rem;
+            border-radius: 50%;
+            background: linear-gradient(135deg, var(--primary) 60%, var(--success) 100%);
+            box-shadow: 0 2px 8px 0 rgba(30,41,59,0.10);
+            flex-shrink: 0;
+            margin-right: var(--space-1);
+        }
+        .brand__logo svg {
+            width: 1.5rem;
+            height: 1.5rem;
+            display: block;
+        }
+        .brand__name {
+            font-size: 1.3rem;
+            font-weight: 600;
+            letter-spacing: -0.01em;
+            color: var(--primary);
+            margin: 0;
+            line-height: 1.1;
+        }
+        .brand__corp {
+            color: var(--text);
+            font-size: 1.1rem;
+            font-weight: 500;
+            margin-left: 0.5rem;
+        }
+        .brand__actions {
+            display: flex;
+            gap: 0.5rem;
+            margin-left: auto;
+        }
+        #btnTheme, #btnContrast {
+            background: none;
+            border: none;
+            color: var(--primary);
+            font-size: 1.2rem;
+            padding: 0.4em 0.6em;
+            border-radius: 50%;
+            cursor: pointer;
+            transition: background 0.15s;
+            outline: none;
+            position: relative;
+        }
+        #btnTheme:focus-visible, #btnContrast:focus-visible {
+            box-shadow: 0 0 0 3px var(--ring);
+            background: rgba(60,60,60,0.08);
+        }
+        #btnTheme svg, #btnContrast svg {
+            width: 1.2em;
+            height: 1.2em;
+            vertical-align: middle;
+            pointer-events: none;
+        }
+        .tabs {
+            display: flex;
+            gap: 0.5rem;
+            margin-bottom: var(--space-2);
+            border-bottom: 1.5px solid var(--input-border);
+            position: relative;
+            background: var(--tab-bg);
+        }
+        .tabs button[role="tab"] {
+            background: none;
+            border: none;
+            color: var(--tab-text);
+            font-size: 1.08rem;
+            font-weight: 500;
+            padding: 0.7em 1.2em 0.7em 1.2em;
+            border-radius: 0.7em 0.7em 0 0;
+            cursor: pointer;
+            transition: color var(--transition), background var(--transition);
+            position: relative;
+            outline: none;
+            margin-bottom: -2px;
+        }
+        .tabs button[aria-selected="true"] {
+            color: var(--tab-active-text);
+            background: var(--tab-active-bg);
+            font-weight: 600;
+        }
+        .tabs__indicator {
+            position: absolute;
+            bottom: -1.5px;
+            left: 0;
+            height: 2.5px;
+            background: var(--tab-underline);
+            border-radius: 2px 2px 0 0;
+            transition: left var(--transition), width var(--transition);
+            z-index: 2;
+            pointer-events: none;
+        }
+        [role="tabpanel"] {
+            display: none;
+            margin-top: var(--space-2);
+        }
+        [role="tabpanel"].active {
+            display: block;
+            animation: fadeIn 0.25s;
+        }
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px);}
+            to { opacity: 1; transform: none;}
+        }
+        form {
+            display: flex;
+            flex-direction: column;
+            gap: var(--space-2);
+        }
+        .auth__field {
+            position: relative;
+            margin-bottom: 0.5rem;
+        }
+        .auth__input {
+            width: 100%;
+            padding: 1.1em 1em 1.1em 1em;
+            font-size: 1.05rem;
+            border: 1.5px solid var(--input-border);
+            border-radius: 0.7em;
+            background: var(--input-bg);
+            color: var(--input-text);
+            outline: none;
+            transition: border-color var(--transition), box-shadow var(--transition);
+            box-sizing: border-box;
+            font-family: inherit;
+            appearance: none;
+        }
+        .auth__input:focus-visible {
+            border-color: var(--input-focus);
+            box-shadow: 0 0 0 3px var(--ring);
+        }
+        .auth__input:disabled {
+            background: #e5e7eb;
+            color: #b0b0b0;
+            cursor: not-allowed;
+        }
+        .auth__input:placeholder-shown + .auth__label {
+            transform: translateY(0.8em) scale(1.05);
+            color: var(--input-placeholder);
+            font-weight: 400;
+        }
+        .auth__label {
+            position: absolute;
+            left: 1em;
+            top: 0.7em;
+            font-size: 1rem;
+            color: var(--muted);
+            pointer-events: none;
+            background: transparent;
+            transition: transform 0.18s, color 0.18s, font-size 0.18s;
+            transform-origin: left top;
+            z-index: 2;
+            font-weight: 500;
+            letter-spacing: 0.01em;
+        }
+        .auth__input:not(:placeholder-shown) + .auth__label,
+        .auth__input:focus + .auth__label {
+            transform: translateY(-0.9em) scale(0.92);
+            color: var(--primary);
+            font-size: 0.97rem;
+            font-weight: 600;
+            background: var(--surface);
+            padding: 0 0.2em;
+        }
+        .auth__input.is-error {
+            border-color: var(--input-error);
+            background: #fff0f0;
+        }
+        .auth__input.is-valid {
+            border-color: var(--input-valid);
+            background: #f0fff7;
+        }
+        .auth__input.is-error + .auth__label {
+            color: var(--input-error);
+        }
+        .auth__input.is-valid + .auth__label {
+            color: var(--input-valid);
+        }
+        .auth__input[aria-invalid="true"] {
+            border-color: var(--input-error);
+        }
+        .auth__input[aria-invalid="true"]:focus {
+            box-shadow: 0 0 0 3px var(--input-error)33;
+        }
+        .auth__input[aria-invalid="false"]:focus {
+            box-shadow: 0 0 0 3px var(--input-valid)33;
+        }
+        .auth__input::-webkit-input-placeholder { color: transparent;}
+        .auth__input::-moz-placeholder { color: transparent;}
+        .auth__input:-ms-input-placeholder { color: transparent;}
+        .auth__input::placeholder { color: transparent;}
+        .auth__toggle-pwd {
+            position: absolute;
+            right: 0.7em;
+            top: 50%;
+            transform: translateY(-50%);
+            background: none;
+            border: none;
+            color: var(--muted);
+            font-size: 1.1em;
+            cursor: pointer;
+            z-index: 3;
+            padding: 0.3em 0.5em;
+            border-radius: 50%;
+            transition: background 0.13s;
+        }
+        .auth__toggle-pwd:focus-visible {
+            background: rgba(60,60,60,0.08);
+            box-shadow: 0 0 0 3px var(--ring);
+        }
+        .auth__toggle-pwd svg {
+            width: 1.2em;
+            height: 1.2em;
+            pointer-events: none;
+        }
+        .auth__error {
+            color: var(--danger);
+            font-size: 0.97em;
+            margin-top: 0.2em;
+            min-height: 1.2em;
+            display: flex;
+            align-items: center;
+            gap: 0.3em;
+            line-height: 1.2;
+            font-weight: 500;
+            transition: color 0.15s;
+        }
+        .auth__error svg {
+            width: 1em;
+            height: 1em;
+            vertical-align: middle;
+            margin-right: 0.2em;
+        }
+        .auth__link {
+            color: var(--primary);
+            text-decoration: underline;
+            font-size: 0.98em;
+            cursor: pointer;
+            background: none;
+            border: none;
+            padding: 0;
+            margin: 0;
+            transition: color 0.15s;
+        }
+        .auth__link:focus-visible {
+            outline: 2px solid var(--ring);
+            outline-offset: 2px;
+        }
+        .auth__checkbox {
+            display: flex;
+            align-items: center;
+            gap: 0.5em;
+            font-size: 0.98em;
+            margin-bottom: 0.2em;
+            user-select: none;
+        }
+        .auth__checkbox input[type="checkbox"] {
+            accent-color: var(--primary);
+            width: 1.1em;
+            height: 1.1em;
+            margin: 0;
+            vertical-align: middle;
+            border-radius: 0.25em;
+            border: 1.5px solid var(--input-border);
+            transition: border-color 0.15s;
+        }
+        .btn {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.08rem;
+            font-weight: 600;
+            border: none;
+            border-radius: 0.7em;
+            padding: 0.95em 1.5em;
+            cursor: pointer;
+            transition: box-shadow 0.13s, background 0.18s, color 0.18s, transform 0.13s;
+            outline: none;
+            position: relative;
+            overflow: hidden;
+            min-width: 7.5em;
+            user-select: none;
+        }
+        .btn:focus-visible {
+            box-shadow: 0 0 0 3px var(--ring);
+        }
+        .btn--primary {
+            background: var(--btn-grad);
+            color: var(--btn-text);
+            box-shadow: 0 2px 8px 0 rgba(30,41,59,0.08);
+        }
+        .btn--primary:active {
+            transform: scale(0.98);
+        }
+        .btn--primary:hover:not(:disabled) {
+            filter: brightness(1.08);
+            box-shadow: 0 4px 16px 0 rgba(30,41,59,0.13);
+        }
+        .btn--ghost {
+            background: var(--btn-ghost-bg);
+            color: var(--btn-ghost-text);
+            border: 1.5px solid var(--primary);
+            font-weight: 500;
+        }
+        .btn:disabled, .btn[aria-disabled="true"] {
+            opacity: 0.6;
+            cursor: not-allowed;
+            pointer-events: none;
+        }
+        .btn .spinner {
+            width: 1.2em;
+            height: 1.2em;
+            border: 2.5px solid #fff;
+            border-top: 2.5px solid var(--primary);
+            border-radius: 50%;
+            animation: spin 0.7s linear infinite;
+            margin-right: 0.6em;
+            display: inline-block;
+            vertical-align: middle;
+        }
+        @keyframes spin {
+            to { transform: rotate(360deg);}
+        }
+        .btn .ripple-span {
+            position: absolute;
+            border-radius: 50%;
+            transform: scale(0);
+            animation: ripple 0.6s linear;
+            background: rgba(255,255,255,0.4);
+            pointer-events: none;
+            z-index: 2;
+        }
+        @keyframes ripple {
+            to { transform: scale(2.5); opacity: 0;}
+        }
+        .pwd-meter {
+            width: 100%;
+            height: 0.6em;
+            background: var(--pwd-meter-bg);
+            border-radius: 0.4em;
+            margin-top: 0.2em;
+            margin-bottom: 0.4em;
+            overflow: hidden;
+            position: relative;
+            transition: background 0.18s;
+        }
+        .pwd-meter__bar {
+            height: 100%;
+            width: 0%;
+            background: var(--pwd-meter-bad);
+            border-radius: 0.4em;
+            transition: width 0.25s, background 0.18s;
+        }
+        .pwd-meter[data-level="1"] .pwd-meter__bar { width: 33%; background: var(--pwd-meter-bad);}
+        .pwd-meter[data-level="2"] .pwd-meter__bar { width: 66%; background: var(--pwd-meter-warn);}
+        .pwd-meter[data-level="3"] .pwd-meter__bar { width: 100%; background: var(--pwd-meter-ok);}
+        .pwd-hints {
+            list-style: none;
+            padding: 0;
+            margin: 0.2em 0 0.5em 0;
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.7em 1.2em;
+            font-size: 0.97em;
+            color: var(--muted);
+        }
+        .pwd-hints li {
+            display: flex;
+            align-items: center;
+            gap: 0.3em;
+            transition: color 0.18s;
+        }
+        .pwd-hints li.ok {
+            color: var(--success);
+            font-weight: 600;
+        }
+        .pwd-hints li svg {
+            width: 1em;
+            height: 1em;
+            vertical-align: middle;
+        }
+        .otp__digits {
+            display: flex;
+            gap: 0.7em;
+            justify-content: center;
+            margin: 1.2em 0 0.7em 0;
+        }
+        .otp__digit {
+            width: 2.5em;
+            height: 2.5em;
+            font-size: 1.5em;
+            text-align: center;
+            border: 1.5px solid var(--otp-border);
+            border-radius: 0.5em;
+            background: var(--otp-bg);
+            color: var(--text);
+            outline: none;
+            margin: 0;
+            font-family: 'Fira Mono', 'Menlo', 'Consolas', monospace;
+            transition: border-color 0.15s, box-shadow 0.15s;
+            box-shadow: none;
+        }
+        .otp__digit:focus-visible {
+            border-color: var(--otp-focus);
+            box-shadow: 0 0 0 3px var(--ring);
+            background: #fffbe7;
+        }
+        .otp__digit[aria-invalid="true"] {
+            border-color: var(--danger);
+            background: #fff0f0;
+        }
+        #resendOtp {
+            margin: 0.5em auto 0 auto;
+            display: block;
+            font-size: 1em;
+            color: var(--primary);
+            background: none;
+            border: none;
+            cursor: pointer;
+            padding: 0.3em 0.7em;
+            border-radius: 0.5em;
+            transition: background 0.13s;
+        }
+        #resendOtp:disabled {
+            color: var(--muted);
+            cursor: not-allowed;
+            opacity: 0.7;
+        }
+        .captcha {
+            margin: 1.2em 0 0.7em 0;
+            min-height: 78px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: #f3f6fa;
+            border-radius: 0.7em;
+            border: 1.5px solid #e5e7eb;
+            color: var(--muted);
+            font-size: 1em;
+            font-weight: 500;
+            padding: 0.7em 0.5em;
+            box-sizing: border-box;
+        }
+        .captcha .recaptcha-placeholder {
+            color: var(--muted);
+            font-size: 1em;
+            text-align: center;
+            width: 100%;
+        }
+        .auth__notice {
+            margin: 1.2em 0 0.5em 0;
+            color: var(--danger);
+            font-size: 1.02em;
+            font-weight: 600;
+            text-align: center;
+            background: rgba(255,0,0,0.07);
+            border-radius: 0.5em;
+            padding: 0.5em 0.7em;
+            border: 1.5px solid var(--danger);
+            letter-spacing: 0.01em;
+        }
+        .auth__footer {
+            margin-top: var(--space-3);
+            text-align: center;
+            font-size: 0.98em;
+            color: var(--muted);
+            display: flex;
+            flex-direction: column;
+            gap: 0.3em;
+        }
+        .auth__footer a {
+            color: var(--primary);
+            text-decoration: underline;
+            margin: 0 0.5em;
+            font-weight: 500;
+            font-size: 1em;
+        }
+        .auth__footer .auth__support {
+            color: var(--primary);
+            font-weight: 600;
+            text-decoration: underline;
+            cursor: pointer;
+            margin-left: 0.7em;
+        }
+        .sr-only {
+            position: absolute !important;
+            width: 1px !important;
+            height: 1px !important;
+            padding: 0 !important;
+            margin: -1px !important;
+            overflow: hidden !important;
+            clip: rect(0,0,0,0) !important;
+            border: 0 !important;
+            white-space: nowrap !important;
+        }
+        .shake {
+            animation: shake 0.35s cubic-bezier(.36,.07,.19,.97) both;
+        }
+        @keyframes shake {
+            10%, 90% { transform: translateX(-2px);}
+            20%, 80% { transform: translateX(4px);}
+            30%, 50%, 70% { transform: translateX(-8px);}
+            40%, 60% { transform: translateX(8px);}
+            100% { transform: none;}
+        }
+        @media (prefers-reduced-motion: reduce) {
+            * { transition: none !important; animation: none !important;}
+            .btn .ripple-span { display: none !important;}
+            .shake { animation: none !important;}
+        }
+        @media (max-width: 480px) {
+            .auth__card { padding: var(--space-2);}
+            .brand__name { font-size: 1.1rem;}
+            .brand__logo { width: 2.1rem; height: 2.1rem;}
+        }
+    </style>
+</head>
+<body>
+    <main class="auth" role="main">
+        <section class="auth__card" aria-labelledby="authTitle">
+            <div class="brand">
+                <span class="brand__logo" id="brandLogo" aria-hidden="true">
+                    <!-- SVG logo será inserido via JS se corporativo -->
+                    <svg viewBox="0 0 32 32" fill="none" aria-hidden="true">
+                        <circle cx="16" cy="16" r="15" fill="#2563eb" />
+                        <path d="M10 18c2-4 10-4 12 0" stroke="#fff" stroke-width="2" stroke-linecap="round"/>
+                        <circle cx="13" cy="13" r="2" fill="#fff"/>
+                        <circle cx="19" cy="13" r="2" fill="#fff"/>
+                    </svg>
+                </span>
+                <h1 id="authTitle" class="brand__name">Autenticação</h1>
+                <span class="brand__corp" id="brandCorp" style="display:none"></span>
+                <div class="brand__actions">
+                    <button id="btnTheme" title="Alternar tema" aria-label="Alternar tema claro/escuro" tabindex="0">
+                        <!-- Sun/Moon SVG alternado via JS -->
+                        <svg id="iconTheme" viewBox="0 0 24 24" fill="none">
+                            <circle cx="12" cy="12" r="5" stroke="currentColor" stroke-width="2"/>
+                            <path d="M12 1v2M12 21v2M4.22 4.22l1.42 1.42M18.36 18.36l1.42 1.42M1 12h2M21 12h2M4.22 19.78l1.42-1.42M18.36 5.64l1.42-1.42" stroke="currentColor" stroke-width="2"/>
+                        </svg>
+                    </button>
+                    <button id="btnContrast" title="Alto contraste" aria-label="Ativar alto contraste" tabindex="0">
+                        <svg viewBox="0 0 24 24" fill="none">
+                            <circle cx="12" cy="12" r="10" stroke="currentColor" stroke-width="2"/>
+                            <path d="M12 2a10 10 0 0 1 0 20V2z" fill="currentColor"/>
+                        </svg>
+                    </button>
+                </div>
+            </div>
+            <nav class="tabs" role="tablist" aria-label="Abas de autenticação">
+                <button id="tab-login" role="tab" aria-controls="panel-login" aria-selected="true" tabindex="0">Login</button>
+                <button id="tab-signup" role="tab" aria-controls="panel-signup" aria-selected="false" tabindex="-1">Criar conta</button>
+                <span class="tabs__indicator" id="tabIndicator"></span>
+            </nav>
+            <section id="panel-login" role="tabpanel" aria-labelledby="tab-login" class="active">
+                <form id="loginForm" autocomplete="on" novalidate>
+                    <div class="auth__field">
+                        <input type="email" id="loginEmail" class="auth__input" name="email" placeholder=" " required autocomplete="username" aria-invalid="false" spellcheck="false" />
+                        <label for="loginEmail" class="auth__label">E-mail</label>
+                        <div class="auth__error" id="loginEmailError"></div>
+                    </div>
+                    <div class="auth__field">
+                        <input type="password" id="loginPassword" class="auth__input" name="password" placeholder=" " required autocomplete="current-password" aria-invalid="false" />
+                        <label for="loginPassword" class="auth__label">Senha</label>
+                        <button type="button" class="auth__toggle-pwd" data-toggle="password" aria-label="Mostrar/ocultar senha" tabindex="0">
+                            <svg viewBox="0 0 24 24" fill="none">
+                                <path d="M1 12s4-7 11-7 11 7 11 7-4 7-11 7S1 12 1 12z" stroke="currentColor" stroke-width="2"/>
+                                <circle cx="12" cy="12" r="3" stroke="currentColor" stroke-width="2"/>
+                            </svg>
+                        </button>
+                        <div class="auth__error" id="loginPasswordError"></div>
+                    </div>
+                    <div class="auth__checkbox">
+                        <input type="checkbox" id="rememberMe" />
+                        <label for="rememberMe">Lembrar-me</label>
+                    </div>
+                    <button type="submit" id="btnLogin" class="btn btn--primary" autocomplete="off">Entrar</button>
+                    <button type="button" class="auth__link" id="forgotPwd" tabindex="0">Esqueci minha senha</button>
+                    <button type="button" class="btn btn--ghost" id="btnGuest" tabindex="0">Continuar como convidado</button>
+                </form>
+            </section>
+            <section id="panel-signup" role="tabpanel" aria-labelledby="tab-signup" hidden>
+                <form id="signupForm" autocomplete="off" novalidate>
+                    <div class="auth__field">
+                        <input type="text" id="name" class="auth__input" name="name" placeholder=" " required autocomplete="name" aria-invalid="false" maxlength="64" />
+                        <label for="name" class="auth__label">Nome completo</label>
+                        <div class="auth__error" id="nameError"></div>
+                    </div>
+                    <div class="auth__field">
+                        <input type="email" id="signupEmail" class="auth__input" name="email" placeholder=" " required autocomplete="email" aria-invalid="false" spellcheck="false" />
+                        <label for="signupEmail" class="auth__label">E-mail</label>
+                        <div class="auth__error" id="signupEmailError"></div>
+                    </div>
+                    <div class="auth__field">
+                        <input type="password" id="signupPassword" class="auth__input" name="password" placeholder=" " required autocomplete="new-password" aria-invalid="false" />
+                        <label for="signupPassword" class="auth__label">Senha</label>
+                        <button type="button" class="auth__toggle-pwd" data-toggle="password" aria-label="Mostrar/ocultar senha" tabindex="0">
+                            <svg viewBox="0 0 24 24" fill="none">
+                                <path d="M1 12s4-7 11-7 11 7 11 7-4 7-11 7S1 12 1 12z" stroke="currentColor" stroke-width="2"/>
+                                <circle cx="12" cy="12" r="3" stroke="currentColor" stroke-width="2"/>
+                            </svg>
+                        </button>
+                        <div class="auth__error" id="signupPasswordError"></div>
+                    </div>
+                    <div class="pwd-meter" data-level="0"><div class="pwd-meter__bar"></div></div>
+                    <ul class="pwd-hints" id="pwdHints">
+                        <li id="hint-length"><svg viewBox="0 0 16 16"><circle cx="8" cy="8" r="7" stroke="currentColor" stroke-width="2" fill="none"/></svg> Mín. 8 caracteres</li>
+                        <li id="hint-upper"><svg viewBox="0 0 16 16"><circle cx="8" cy="8" r="7" stroke="currentColor" stroke-width="2" fill="none"/></svg> Maiúscula</li>
+                        <li id="hint-lower"><svg viewBox="0 0 16 16"><circle cx="8" cy="8" r="7" stroke="currentColor" stroke-width="2" fill="none"/></svg> Minúscula</li>
+                        <li id="hint-digit"><svg viewBox="0 0 16 16"><circle cx="8" cy="8" r="7" stroke="currentColor" stroke-width="2" fill="none"/></svg> Número</li>
+                        <li id="hint-symbol"><svg viewBox="0 0 16 16"><circle cx="8" cy="8" r="7" stroke="currentColor" stroke-width="2" fill="none"/></svg> Símbolo</li>
+                    </ul>
+                    <div class="auth__field">
+                        <input type="password" id="confirmPassword" class="auth__input" name="confirmPassword" placeholder=" " required autocomplete="new-password" aria-invalid="false" />
+                        <label for="confirmPassword" class="auth__label">Confirmar senha</label>
+                        <button type="button" class="auth__toggle-pwd" data-toggle="password" aria-label="Mostrar/ocultar senha" tabindex="0">
+                            <svg viewBox="0 0 24 24" fill="none">
+                                <path d="M1 12s4-7 11-7 11 7 11 7-4 7-11 7S1 12 1 12z" stroke="currentColor" stroke-width="2"/>
+                                <circle cx="12" cy="12" r="3" stroke="currentColor" stroke-width="2"/>
+                            </svg>
+                        </button>
+                        <div class="auth__error" id="confirmPasswordError"></div>
+                    </div>
+                    <div class="auth__checkbox">
+                        <input type="checkbox" id="acceptTos" />
+                        <label for="acceptTos">Aceito os <a href="#" tabindex="0">Termos</a></label>
+                    </div>
+                    <button type="submit" id="btnSignup" class="btn btn--primary" disabled>Criar conta</button>
+                </form>
+            </section>
+            <section id="otpStep" hidden>
+                <form id="otpForm" autocomplete="off" novalidate>
+                    <div class="otp__digits" aria-label="Código de verificação">
+                        <input class="otp__digit" inputmode="numeric" maxlength="1" autocomplete="one-time-code" aria-label="Dígito 1" />
+                        <input class="otp__digit" inputmode="numeric" maxlength="1" autocomplete="one-time-code" aria-label="Dígito 2" />
+                        <input class="otp__digit" inputmode="numeric" maxlength="1" autocomplete="one-time-code" aria-label="Dígito 3" />
+                        <input class="otp__digit" inputmode="numeric" maxlength="1" autocomplete="one-time-code" aria-label="Dígito 4" />
+                        <input class="otp__digit" inputmode="numeric" maxlength="1" autocomplete="one-time-code" aria-label="Dígito 5" />
+                        <input class="otp__digit" inputmode="numeric" maxlength="1" autocomplete="one-time-code" aria-label="Dígito 6" />
+                    </div>
+                    <div class="auth__error" id="otpError"></div>
+                    <button type="submit" class="btn btn--primary" id="btnOtp">Verificar</button>
+                    <button type="button" id="resendOtp" class="btn btn--ghost" disabled>Reenviar código</button>
+                </form>
+            </section>
+            <div id="captchaBox" class="captcha">
+                <div class="recaptcha-placeholder">reCAPTCHA indisponível (demo)</div>
+                <!-- Para ativar reCAPTCHA v2, inclua manualmente:<br>
+                <code>&lt;script src="https://www.google.com/recaptcha/api.js" async defer&gt;&lt;/script&gt;</code>
+                -->
+            </div>
+            <div id="liveRegion" aria-live="polite" class="sr-only"></div>
+            <div class="auth__notice" id="corpNotice" style="display:none">Acesso restrito. Atividade monitorada.</div>
+            <footer class="auth__footer">
+                <span>
+                    <a href="#" tabindex="0">Privacidade</a> •
+                    <a href="#" tabindex="0">Termos</a>
+                    <span class="auth__support" id="corpSupport" style="display:none">Suporte de acesso</span>
+                </span>
+                <!--
+                Testes manuais:
+                - Alternar abas e recarregar: persiste aba ativa.
+                - Login 5x errado: bloqueia 30s com contador.
+                - “Lembrar-me”: preenche e-mail ao voltar.
+                - Criar conta: botão só ativa quando senha forte (nível ≥2) + termos.
+                - 2FA: digitar/paste 6 dígitos; reenviar com cooldown.
+                - Tema/contraste persistem após reload.
+                - `prefers-reduced-motion`: animações desativadas.
+                -->
+            </footer>
+        </section>
+    </main>
+    <script type="module">
+        // ====== CONFIGURAÇÃO ======
+        /** @type {'personal'|'corporate'} */
+        const APP_MODE = 'personal'; // 'corporate' para modo corporativo
+        const COMPANY_NAME = 'CorpX';
+        const LOGO_SVG = `<svg viewBox="0 0 32 32" fill="none" aria-hidden="true">
+            <rect x="3" y="3" width="26" height="26" rx="7" fill="#2563eb"/>
+            <path d="M10 22l6-12 6 12" stroke="#fff" stroke-width="2" stroke-linecap="round"/>
+        </svg>`;
+        const ENABLE_2FA = true; // Ativar fluxo OTP/2FA
+        const RECAPTCHA_SITE_KEY = 'RECAPTCHA_SITE_KEY'; // Placeholder
+
+        // ====== UTILS ======
+        /** Seleciona um elemento */
+        const qs = (sel, el=document) => el.querySelector(sel);
+        /** Seleciona todos */
+        const qsa = (sel, el=document) => Array.from(el.querySelectorAll(sel));
+        /** Adiciona event listener */
+        const on = (el, evt, fn, opt) => el && el.addEventListener(evt, fn, opt);
+
+        /** Atualiza região de mensagens acessíveis */
+        function liveMsg(msg, type='info') {
+            const reg = qs('#liveRegion');
+            if (reg) {
+                reg.textContent = msg || '';
+                if (msg && type==='error') reg.setAttribute('role','alert');
+                else reg.removeAttribute('role');
+            }
+        }
+
+        /** Mostra erro próximo ao campo */
+        function showFieldError(input, msg) {
+            const err = input && input.parentElement && qs('.auth__error', input.parentElement);
+            if (err) {
+                err.innerHTML = msg ? `<svg viewBox="0 0 16 16"><circle cx="8" cy="8" r="7" stroke="currentColor" stroke-width="2" fill="none"/><path d="M8 5v3.5M8 12h.01" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg> ${msg}` : '';
+            }
+            input && input.setAttribute('aria-invalid', !!msg);
+        }
+
+        /** Limpa todos erros do formulário */
+        function clearFormErrors(form) {
+            qsa('.auth__error', form).forEach(e=>e.textContent='');
+            qsa('.auth__input', form).forEach(i=>i.setAttribute('aria-invalid','false'));
+            liveMsg('');
+        }
+
+        /** Adiciona ripple em botão */
+        function ripple(e) {
+            if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+            const btn = e.currentTarget;
+            const rect = btn.getBoundingClientRect();
+            const span = document.createElement('span');
+            span.className = 'ripple-span';
+            const size = Math.max(rect.width, rect.height);
+            span.style.width = span.style.height = size+'px';
+            span.style.left = (e.clientX - rect.left - size/2) + 'px';
+            span.style.top = (e.clientY - rect.top - size/2) + 'px';
+            btn.appendChild(span);
+            setTimeout(()=>span.remove(), 600);
+        }
+
+        /** Shake anim em erro */
+        function shake(el) {
+            if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+            el.classList.add('shake');
+            setTimeout(()=>el.classList.remove('shake'), 350);
+        }
+
+        // ====== VALIDAÇÕES ======
+        /**
+         * Valida e-mail (regex robusta)
+         * @param {string} email
+         * @returns {boolean}
+         */
+        function validateEmail(email) {
+            return /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/.test(email.trim());
+        }
+        /**
+         * Valida senha (mín. 8, maiúscula, minúscula, dígito, símbolo)
+         * @param {string} pwd
+         * @returns {{score:number, hints:{[k:string]:boolean}}}
+         */
+        function validatePassword(pwd) {
+            const hints = {
+                length: pwd.length >= 8,
+                upper: /[A-Z]/.test(pwd),
+                lower: /[a-z]/.test(pwd),
+                digit: /\d/.test(pwd),
+                symbol: /[!@#$%^&*()_\-+=\[\]{};:'",.<>/?\\|`~]/.test(pwd)
+            };
+            let score = 0;
+            if (hints.length) score++;
+            if (hints.upper && hints.lower) score++;
+            if (hints.digit && hints.symbol) score++;
+            return {score, hints};
+        }
+        /**
+         * Confirma senha igual
+         * @param {string} pwd
+         * @param {string} confirm
+         * @returns {boolean}
+         */
+        function validateConfirmPassword(pwd, confirm) {
+            return pwd && confirm && pwd === confirm;
+        }
+
+        // ====== TEMA E CONTRASTE ======
+        function setTheme(theme) {
+            document.documentElement.classList.toggle('theme-dark', theme==='dark');
+            localStorage.setItem('auth.theme', theme);
+            updateThemeIcon();
+        }
+        function setContrast(on) {
+            document.documentElement.classList.toggle('theme-contrast', !!on);
+            localStorage.setItem('auth.contrast', on?'1':'0');
+        }
+        function updateThemeIcon() {
+            const icon = qs('#iconTheme');
+            if (!icon) return;
+            if (document.documentElement.classList.contains('theme-dark')) {
+                icon.innerHTML = `<path d="M21 12.79A9 9 0 1 1 11.21 3a7 7 0 1 0 9.79 9.79z" stroke="currentColor" stroke-width="2" fill="none"/>`;
+            } else {
+                icon.innerHTML = `<circle cx="12" cy="12" r="5" stroke="currentColor" stroke-width="2"/>
+                <path d="M12 1v2M12 21v2M4.22 4.22l1.42 1.42M18.36 18.36l1.42 1.42M1 12h2M21 12h2M4.22 19.78l1.42-1.42M18.36 5.64l1.42-1.42" stroke="currentColor" stroke-width="2"/>`;
+            }
+        }
+
+        // ====== ABAS ======
+        /**
+         * Alterna abas de autenticação
+         * @param {'login'|'signup'} tab
+         */
+        function switchTab(tab) {
+            const loginTab = qs('#tab-login'), signupTab = qs('#tab-signup');
+            const loginPanel = qs('#panel-login'), signupPanel = qs('#panel-signup');
+            if (tab==='login') {
+                loginTab.setAttribute('aria-selected','true');
+                loginTab.tabIndex = 0;
+                signupTab.setAttribute('aria-selected','false');
+                signupTab.tabIndex = -1;
+                loginPanel.classList.add('active');
+                loginPanel.hidden = false;
+                signupPanel.classList.remove('active');
+                signupPanel.hidden = true;
+                qs('#otpStep').hidden = true;
+                setTimeout(()=>qs('#loginEmail').focus(), 80);
+            } else {
+                signupTab.setAttribute('aria-selected','true');
+                signupTab.tabIndex = 0;
+                loginTab.setAttribute('aria-selected','false');
+                loginTab.tabIndex = -1;
+                signupPanel.classList.add('active');
+                signupPanel.hidden = false;
+                loginPanel.classList.remove('active');
+                loginPanel.hidden = true;
+                qs('#otpStep').hidden = true;
+                setTimeout(()=>qs('#name').focus(), 80);
+            }
+            localStorage.setItem('auth.activeTab', tab);
+            updateTabIndicator();
+        }
+        function updateTabIndicator() {
+            const tab = qs('.tabs button[aria-selected="true"]');
+            const ind = qs('#tabIndicator');
+            if (tab && ind) {
+                const rect = tab.getBoundingClientRect();
+                const parentRect = tab.parentElement.getBoundingClientRect();
+                ind.style.left = (rect.left - parentRect.left) + 'px';
+                ind.style.width = rect.width + 'px';
+            }
+        }
+
+        // ====== LOGIN LOCKOUT ======
+        function getLockUntil() {
+            const v = localStorage.getItem('auth.lockUntil');
+            return v ? parseInt(v,10) : 0;
+        }
+        function setLockUntil(ts) {
+            localStorage.setItem('auth.lockUntil', ts ? String(ts) : '');
+        }
+        function isLocked() {
+            const until = getLockUntil();
+            return until && Date.now() < until;
+        }
+        function lockCountdown(btn) {
+            const until = getLockUntil();
+            if (!until) return;
+            const left = Math.max(0, Math.ceil((until-Date.now())/1000));
+            btn.textContent = `Bloqueado (${left}s)`;
+            btn.disabled = true;
+            if (left > 0) {
+                setTimeout(()=>lockCountdown(btn), 1000);
+            } else {
+                btn.textContent = 'Entrar';
+                btn.disabled = false;
+                setLockUntil(0);
+            }
+        }
+
+        // ====== reCAPTCHA ======
+        function renderRecaptcha() {
+            const box = qs('#captchaBox');
+            if (!box) return;
+            if (window.grecaptcha && typeof window.grecaptcha.render === 'function') {
+                box.innerHTML = '';
+                window.grecaptcha.render(box, {
+                    sitekey: RECAPTCHA_SITE_KEY,
+                    theme: document.documentElement.classList.contains('theme-dark') ? 'dark' : 'light'
+                });
+            } else {
+                box.innerHTML = `<div class="recaptcha-placeholder">reCAPTCHA indisponível (demo)</div>`;
+            }
+        }
+
+        // ====== 2FA/OTP ======
+        let otpCooldown = 0, otpTimer = null;
+        function startOtpCooldown() {
+            otpCooldown = 60;
+            const btn = qs('#resendOtp');
+            btn.disabled = true;
+            btn.textContent = `Reenviar código (${otpCooldown}s)`;
+            otpTimer = setInterval(()=>{
+                otpCooldown--;
+                btn.textContent = `Reenviar código (${otpCooldown}s)`;
+                if (otpCooldown <= 0) {
+                    clearInterval(otpTimer);
+                    btn.disabled = false;
+                    btn.textContent = 'Reenviar código';
+                }
+            }, 1000);
+        }
+        function resetOtpInputs() {
+            qsa('.otp__digit', qs('#otpForm')).forEach(i=>{
+                i.value = '';
+                i.setAttribute('aria-invalid','false');
+            });
+            qs('#otpError').textContent = '';
+        }
+        function focusOtp(idx) {
+            const inputs = qsa('.otp__digit', qs('#otpForm'));
+            if (inputs[idx]) inputs[idx].focus();
+        }
+
+        // ====== INICIALIZAÇÃO ======
+        function init() {
+            // Modo corporativo/pessoal
+            if (APP_MODE==='corporate') {
+                document.body.classList.add('corporate-bg');
+                qs('#authTitle').textContent = 'Acesso Corporativo';
+                qs('#brandLogo').innerHTML = LOGO_SVG;
+                qs('#brandCorp').textContent = COMPANY_NAME;
+                qs('#brandCorp').style.display = '';
+                qs('#corpNotice').style.display = '';
+                qs('#corpSupport').style.display = '';
+            } else {
+                document.body.classList.remove('corporate-bg');
+                qs('#authTitle').textContent = 'Autenticação';
+                qs('#brandLogo').innerHTML = `<svg viewBox="0 0 32 32" fill="none" aria-hidden="true">
+                    <circle cx="16" cy="16" r="15" fill="#2563eb" />
+                    <path d="M10 18c2-4 10-4 12 0" stroke="#fff" stroke-width="2" stroke-linecap="round"/>
+                    <circle cx="13" cy="13" r="2" fill="#fff"/>
+                    <circle cx="19" cy="13" r="2" fill="#fff"/>
+                </svg>`;
+                qs('#brandCorp').style.display = 'none';
+                qs('#corpNotice').style.display = 'none';
+                qs('#corpSupport').style.display = 'none';
+            }
+            // Tema inicial
+            const theme = localStorage.getItem('auth.theme') || 'light';
+            setTheme(theme);
+            setContrast(localStorage.getItem('auth.contrast')==='1');
+            updateThemeIcon();
+            // Abas
+            const activeTab = localStorage.getItem('auth.activeTab') || 'login';
+            switchTab(activeTab);
+            setTimeout(updateTabIndicator, 120);
+            on(window, 'resize', updateTabIndicator);
+            // Lembrar e-mail
+            const remembered = localStorage.getItem('auth.rememberedEmail');
+            if (remembered) qs('#loginEmail').value = remembered;
+            // Lockout
+            if (isLocked()) lockCountdown(qs('#btnLogin'));
+            // reCAPTCHA
+            renderRecaptcha();
+            // 2FA
+            if (!ENABLE_2FA) qs('#otpStep').style.display = 'none';
+        }
+
+        // ====== EVENTOS ======
+        document.addEventListener('DOMContentLoaded', ()=>{
+            init();
+
+            // Abas
+            on(qs('#tab-login'), 'click', ()=>switchTab('login'));
+            on(qs('#tab-signup'), 'click', ()=>switchTab('signup'));
+            // Atalhos Ctrl+1/Ctrl+2
+            on(document, 'keydown', e=>{
+                if (e.ctrlKey && !e.altKey && !e.shiftKey) {
+                    if (e.key==='1') { switchTab('login'); e.preventDefault();}
+                    if (e.key==='2') { switchTab('signup'); e.preventDefault();}
+                }
+            });
+
+            // Tema/contraste
+            on(qs('#btnTheme'), 'click', ()=>{
+                const dark = !document.documentElement.classList.contains('theme-dark');
+                setTheme(dark?'dark':'light');
+                renderRecaptcha();
+            });
+            on(qs('#btnContrast'), 'click', ()=>{
+                const on = !document.documentElement.classList.contains('theme-contrast');
+                setContrast(on);
+                renderRecaptcha();
+            });
+
+            // Mostrar/ocultar senha + Alt+P
+            qsa('[data-toggle="password"]').forEach(btn=>{
+                on(btn, 'click', ()=>{
+                    const input = btn.parentElement.querySelector('input[type="password"],input[type="text"]');
+                    if (!input) return;
+                    if (input.type==='password') {
+                        input.type = 'text';
+                        btn.innerHTML = `<svg viewBox="0 0 24 24"><path d="M1 12s4-7 11-7 11 7 11 7-4 7-11 7S1 12 1 12z" stroke="currentColor" stroke-width="2"/><circle cx="12" cy="12" r="3" stroke="currentColor" stroke-width="2"/><line x1="4" y1="4" x2="20" y2="20" stroke="currentColor" stroke-width="2"/></svg>`;
+                    } else {
+                        input.type = 'password';
+                        btn.innerHTML = `<svg viewBox="0 0 24 24"><path d="M1 12s4-7 11-7 11 7 11 7-4 7-11 7S1 12 1 12z" stroke="currentColor" stroke-width="2"/><circle cx="12" cy="12" r="3" stroke="currentColor" stroke-width="2"/></svg>`;
+                    }
+                    input.focus();
+                });
+            });
+            on(document, 'keydown', e=>{
+                if (e.altKey && e.key.toLowerCase()==='p') {
+                    const active = qs('[role="tabpanel"].active');
+                    const pwd = qs('input[type="password"],input[type="text"]', active);
+                    const btn = pwd && pwd.parentElement.querySelector('[data-toggle="password"]');
+                    if (btn) btn.click();
+                }
+            });
+
+            // Login validação
+            const loginForm = qs('#loginForm');
+            on(qs('#loginEmail'), 'input', e=>{
+                const v = e.target.value;
+                if (!v) showFieldError(e.target, '');
+                else if (!validateEmail(v)) showFieldError(e.target, 'E-mail inválido');
+                else showFieldError(e.target, '');
+            });
+            on(qs('#loginPassword'), 'input', e=>{
+                showFieldError(e.target, '');
+            });
+
+            // Login submit
+            on(loginForm, 'submit', e=>{
+                e.preventDefault();
+                if (isLocked()) {
+                    shake(loginForm);
+                    lockCountdown(qs('#btnLogin'));
+                    liveMsg('Login bloqueado. Aguarde.', 'error');
+                    return;
+                }
+                clearFormErrors(loginForm);
+                const email = qs('#loginEmail').value.trim();
+                const pwd = qs('#loginPassword').value;
+                let valid = true;
+                if (!validateEmail(email)) {
+                    showFieldError(qs('#loginEmail'), 'E-mail inválido');
+                    valid = false;
+                }
+                if (!pwd) {
+                    showFieldError(qs('#loginPassword'), 'Informe a senha');
+                    valid = false;
+                }
+                if (!valid) {
+                    shake(loginForm);
+                    liveMsg('Corrija os campos destacados.', 'error');
+                    return;
+                }
+                // Simula POST /api/login
+                const btn = qs('#btnLogin');
+                btn.classList.add('is-loading');
+                btn.disabled = true;
+                btn.innerHTML = `<span class="spinner"></span>Entrando...`;
+                qsa('.auth__input', loginForm).forEach(i=>i.disabled=true);
+                setTimeout(()=>{
+                    // Simula lockout após 5 falhas
+                    let fails = parseInt(sessionStorage.getItem('auth.loginFails')||'0',10);
+                    if (email==='fail@fail.com' || pwd==='fail') fails = 5;
+                    if (fails >= 5) {
+                        setLockUntil(Date.now()+30000);
+                        sessionStorage.setItem('auth.loginFails','0');
+                        btn.classList.remove('is-loading');
+                        btn.innerHTML = 'Bloqueado (30s)';
+                        btn.disabled = true;
+                        lockCountdown(btn);
+                        qsa('.auth__input', loginForm).forEach(i=>i.disabled=false);
+                        shake(loginForm);
+                        liveMsg('Muitas tentativas. Aguarde 30s.', 'error');
+                        return;
+                    }
+                    if (email==='user@demo.com' && pwd==='Senha@123') {
+                        sessionStorage.setItem('auth.loginFails','0');
+                        if (qs('#rememberMe').checked) localStorage.setItem('auth.rememberedEmail', email);
+                        else localStorage.removeItem('auth.rememberedEmail');
+                        btn.classList.remove('is-loading');
+                        btn.innerHTML = 'Entrar';
+                        btn.disabled = false;
+                        qsa('.auth__input', loginForm).forEach(i=>i.disabled=false);
+                        if (ENABLE_2FA) {
+                            qs('#panel-login').classList.remove('active');
+                            qs('#panel-login').hidden = true;
+                            qs('#otpStep').hidden = false;
+                            resetOtpInputs();
+                            setTimeout(()=>focusOtp(0), 120);
+                            startOtpCooldown();
+                            liveMsg('Código enviado para seu e-mail.', 'info');
+                        } else {
+                            liveMsg('Login efetuado!', 'info');
+                        }
+                    } else {
+                        fails++;
+                        sessionStorage.setItem('auth.loginFails', String(fails));
+                        btn.classList.remove('is-loading');
+                        btn.innerHTML = 'Entrar';
+                        btn.disabled = false;
+                        qsa('.auth__input', loginForm).forEach(i=>i.disabled=false);
+                        showFieldError(qs('#loginPassword'), 'Usuário ou senha inválidos');
+                        shake(loginForm);
+                        liveMsg('Usuário ou senha inválidos.', 'error');
+                    }
+                }, 900);
+            });
+
+            // Lembrar-me
+            on(qs('#rememberMe'), 'change', e=>{
+                if (e.target.checked) localStorage.setItem('auth.rememberedEmail', qs('#loginEmail').value.trim());
+                else localStorage.removeItem('auth.rememberedEmail');
+            });
+
+            // Esqueci senha (demo)
+            on(qs('#forgotPwd'), 'click', ()=>{
+                liveMsg('Função de recuperação de senha não implementada (demo).', 'info');
+            });
+
+            // Guest
+            on(qs('#btnGuest'), 'click', ()=>{
+                sessionStorage.setItem('auth.guest','1');
+                liveMsg('Entrando como convidado...', 'info');
+                setTimeout(()=>window.location.assign('#/guest'), 800);
+            });
+
+            // Signup validação
+            const signupForm = qs('#signupForm');
+            const pwdMeter = qs('.pwd-meter');
+            const pwdHints = {
+                length: qs('#hint-length'),
+                upper: qs('#hint-upper'),
+                lower: qs('#hint-lower'),
+                digit: qs('#hint-digit'),
+                symbol: qs('#hint-symbol')
+            };
+            let pwdScore = 0;
+            on(qs('#signupPassword'), 'input', e=>{
+                const v = e.target.value;
+                const {score, hints} = validatePassword(v);
+                pwdScore = score;
+                pwdMeter.setAttribute('data-level', score);
+                Object.entries(hints).forEach(([k,ok])=>{
+                    pwdHints[k].classList.toggle('ok', ok);
+                    pwdHints[k].innerHTML = ok
+                        ? `<svg viewBox="0 0 16 16"><circle cx="8" cy="8" r="7" stroke="currentColor" stroke-width="2" fill="none"/><path d="M4 8l2.5 2.5L12 6" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg> ${pwdHints[k].textContent.trim().replace(/^.+?\s/, '')}`
+                        : `<svg viewBox="0 0 16 16"><circle cx="8" cy="8" r="7" stroke="currentColor" stroke-width="2" fill="none"/></svg> ${pwdHints[k].textContent.trim().replace(/^.+?\s/, '')}`;
+                });
+                showFieldError(e.target, '');
+                // Habilita botão se score >=2 e termos
+                const tos = qs('#acceptTos').checked;
+                qs('#btnSignup').disabled = !(score>=2 && tos);
+            });
+            on(qs('#acceptTos'), 'change', e=>{
+                qs('#btnSignup').disabled = !(pwdScore>=2 && e.target.checked);
+            });
+            on(qs('#signupEmail'), 'input', e=>{
+                const v = e.target.value;
+                if (!v) showFieldError(e.target, '');
+                else if (!validateEmail(v)) showFieldError(e.target, 'E-mail inválido');
+                else showFieldError(e.target, '');
+            });
+            on(qs('#name'), 'input', e=>{
+                if (!e.target.value.trim()) showFieldError(e.target, 'Informe seu nome');
+                else showFieldError(e.target, '');
+            });
+            on(qs('#confirmPassword'), 'input', e=>{
+                const pwd = qs('#signupPassword').value;
+                const conf = e.target.value;
+                if (!validateConfirmPassword(pwd, conf)) showFieldError(e.target, 'Senhas não coincidem');
+                else showFieldError(e.target, '');
+            });
+
+            // Signup submit
+            on(signupForm, 'submit', e=>{
+                e.preventDefault();
+                clearFormErrors(signupForm);
+                const name = qs('#name').value.trim();
+                const email = qs('#signupEmail').value.trim();
+                const pwd = qs('#signupPassword').value;
+                const conf = qs('#confirmPassword').value;
+                const tos = qs('#acceptTos').checked;
+                let valid = true;
+                if (!name) { showFieldError(qs('#name'), 'Informe seu nome'); valid=false;}
+                if (!validateEmail(email)) { showFieldError(qs('#signupEmail'), 'E-mail inválido'); valid=false;}
+                const {score, hints} = validatePassword(pwd);
+                if (score<2) { showFieldError(qs('#signupPassword'), 'Senha fraca'); valid=false;}
+                if (!validateConfirmPassword(pwd, conf)) { showFieldError(qs('#confirmPassword'), 'Senhas não coincidem'); valid=false;}
+                if (!tos) { liveMsg('Você deve aceitar os Termos.', 'error'); valid=false;}
+                if (!valid) {
+                    shake(signupForm);
+                    return;
+                }
+                // Simula POST /api/signup
+                const btn = qs('#btnSignup');
+                btn.classList.add('is-loading');
+                btn.disabled = true;
+                btn.innerHTML = `<span class="spinner"></span>Criando...`;
+                qsa('.auth__input', signupForm).forEach(i=>i.disabled=true);
+                setTimeout(()=>{
+                    btn.classList.remove('is-loading');
+                    btn.innerHTML = 'Criar conta';
+                    btn.disabled = false;
+                    qsa('.auth__input', signupForm).forEach(i=>i.disabled=false);
+                    signupForm.reset();
+                    pwdMeter.setAttribute('data-level', 0);
+                    Object.values(pwdHints).forEach(li=>li.classList.remove('ok'));
+                    switchTab('login');
+                    qs('#loginEmail').value = email;
+                    liveMsg('Conta criada! Faça login.', 'info');
+                    setTimeout(()=>qs('#loginPassword').focus(), 120);
+                }, 1100);
+            });
+
+            // OTP
+            const otpForm = qs('#otpForm');
+            const otpInputs = qsa('.otp__digit', otpForm);
+            otpInputs.forEach((input, idx)=>{
+                on(input, 'input', e=>{
+                    const v = e.target.value.replace(/\D/g,'');
+                    e.target.value = v;
+                    if (v && idx<5) otpInputs[idx+1].focus();
+                });
+                on(input, 'keydown', e=>{
+                    if (e.key==='Backspace' && !e.target.value && idx>0) {
+                        otpInputs[idx-1].focus();
+                    }
+                });
+                on(input, 'focus', e=>e.target.select());
+                on(input, 'paste', e=>{
+                    const data = (e.clipboardData || window.clipboardData).getData('text').replace(/\D/g,'');
+                    if (data.length===6) {
+                        otpInputs.forEach((inp,i)=>inp.value = data[i]||'');
+                        otpInputs[5].focus();
+                        e.preventDefault();
+                    }
+                });
+            });
+            on(otpForm, 'submit', e=>{
+                e.preventDefault();
+                const code = otpInputs.map(i=>i.value).join('');
+                if (!/^\d{6}$/.test(code)) {
+                    qs('#otpError').textContent = 'Código inválido';
+                    otpInputs.forEach(i=>i.setAttribute('aria-invalid','true'));
+                    shake(otpForm);
+                    liveMsg('Código inválido.', 'error');
+                    return;
+                }
+                qs('#btnOtp').classList.add('is-loading');
+                qs('#btnOtp').disabled = true;
+                setTimeout(()=>{
+                    qs('#btnOtp').classList.remove('is-loading');
+                    qs('#btnOtp').disabled = false;
+                    if (code==='123456') {
+                        liveMsg('2FA verificado! Login efetuado.', 'info');
+                        qs('#otpStep').hidden = true;
+                    } else {
+                        qs('#otpError').textContent = 'Código incorreto';
+                        otpInputs.forEach(i=>i.setAttribute('aria-invalid','true'));
+                        shake(otpForm);
+                        liveMsg('Código incorreto.', 'error');
+                    }
+                }, 900);
+            });
+            on(qs('#resendOtp'), 'click', ()=>{
+                resetOtpInputs();
+                startOtpCooldown();
+                liveMsg('Novo código enviado.', 'info');
+            });
+
+            // Enter envia, Esc limpa erros
+            on(document, 'keydown', e=>{
+                if (e.key==='Escape') {
+                    clearFormErrors(qs('[role="tabpanel"].active form'));
+                }
+            });
+
+            // Ripple em botões
+            qsa('.btn').forEach(btn=>{
+                on(btn, 'click', ripple);
+            });
+
+            // Foco visível
+            qsa('button, input, a').forEach(el=>{
+                el.addEventListener('keydown', e=>{
+                    if (e.key==='Tab') el.classList.add('focus-visible');
+                });
+                el.addEventListener('blur', ()=>el.classList.remove('focus-visible'));
+            });
+
+            // Preferências motion
+            if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+                document.body.classList.add('reduced-motion');
+            }
+
+            // reCAPTCHA observer
+            if (window.grecaptcha) renderRecaptcha();
+        });
+
+        // ====== DEBUG ======
+        window.Auth = {
+            init, switchTab,
+            submitLogin: ()=>qs('#loginForm').dispatchEvent(new Event('submit', {cancelable:true, bubbles:true})),
+            submitSignup: ()=>qs('#signupForm').dispatchEvent(new Event('submit', {cancelable:true, bubbles:true})),
+            submitOtp: ()=>qs('#otpForm').dispatchEvent(new Event('submit', {cancelable:true, bubbles:true}))
+        };
+    </script>
+</body>
+</html>

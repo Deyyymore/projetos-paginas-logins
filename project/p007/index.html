@@ -1,0 +1,199 @@
+<!DOCTYPE html>
+<html lang="pt-br"></html></html>
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login Minimalista</title>
+    <style>
+        body {
+            min-height: 100vh;
+            margin: 0;
+            font-family: 'Segoe UI', Arial, sans-serif;
+            background: linear-gradient(135deg, #6a82fb 0%, #fc5c7d 100%);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        .login-card {
+            background: #fff;
+            padding: 2.5rem 2rem;
+            border-radius: 18px;
+            box-shadow: 0 6px 32px rgba(60, 60, 120, 0.15);
+            min-width: 320px;
+            display: flex;
+            flex-direction: column;
+            gap: 1.2rem;
+        }
+        .login-card h2 {
+            margin: 0 0 0.5rem 0;
+            font-weight: 600;
+            color: #333;
+            text-align: center;
+        }
+        .login-card form {
+            display: flex;
+            flex-direction: column;
+            gap: 1rem;
+        }
+        .login-card input[type="email"],
+        .login-card input[type="password"] {
+            padding: 0.75rem 1rem;
+            border: 1px solid #e0e0e0;
+            border-radius: 8px;
+            font-size: 1rem;
+            outline: none;
+            transition: border 0.2s;
+        }
+        .login-card input:focus {
+            border-color: #6a82fb;
+        }
+        .login-card button[type="submit"] {
+            padding: 0.75rem 1rem;
+            background: linear-gradient(90deg, #6a82fb 0%, #fc5c7d 100%);
+            color: #fff;
+            border: none;
+            border-radius: 8px;
+            font-size: 1.05rem;
+            font-weight: 600;
+            cursor: pointer;
+            box-shadow: 0 2px 8px rgba(106,130,251,0.08);
+            transition: transform 0.18s cubic-bezier(.4,2,.6,1), box-shadow 0.18s;
+        }
+        .login-card button[type="submit"]:hover {
+            transform: translateY(-2px) scale(1.03);
+            box-shadow: 0 6px 20px rgba(106,130,251,0.18);
+        }
+        .login-card .actions {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-top: -0.5rem;
+        }
+        .login-card .actions a {
+            color: #6a82fb;
+            text-decoration: none;
+            font-size: 0.97rem;
+            transition: text-decoration 0.2s;
+        }
+        .login-card .actions a:hover {
+            text-decoration: underline;
+        }
+        .login-card .divider {
+            text-align: center;
+            color: #aaa;
+            font-size: 0.95rem;
+            margin: 0.5rem 0;
+            position: relative;
+        }
+        .login-card .divider:before,
+        .login-card .divider:after {
+            content: "";
+            display: inline-block;
+            width: 40%;
+            height: 1px;
+            background: #eee;
+            vertical-align: middle;
+            margin: 0 0.5em;
+        }
+        .login-card .social-login {
+            display: flex;
+            gap: 0.7rem;
+            justify-content: center;
+            flex-wrap: wrap;
+        }
+        .login-card .social-btn {
+            flex: 1 1 40%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0.5em;
+            padding: 0.6rem 0.5rem;
+            border: none;
+            border-radius: 7px;
+            background: #f5f5f5;
+            color: #444;
+            font-size: 0.98rem;
+            cursor: pointer;
+            transition: background 0.18s, box-shadow 0.18s;
+            box-shadow: 0 1px 4px rgba(60,60,120,0.07);
+            margin-bottom: 0.3rem;
+        }
+        .login-card .social-btn:hover {
+            background: #e8e8e8;
+        }
+        .login-card .social-btn svg {
+            width: 20px;
+            height: 20px;
+        }
+        @media (max-width: 400px) {
+            .login-card {
+                min-width: 90vw;
+                padding: 1.5rem 0.5rem;
+            }
+            .login-card .social-login {
+                flex-direction: column;
+                gap: 0.5rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="login-card">
+        <h2>Login</h2>
+        <form id="loginForm" autocomplete="on">
+            <input type="email" placeholder="E-mail" required>
+            <input type="password" placeholder="Senha" required>
+            <div class="actions">
+                <a href="#" id="forgotLink">Esqueci minha senha</a>
+                <a href="#" id="registerLink">Cadastrar</a>
+            </div>
+            <button type="submit">Entrar</button>
+        </form>
+        <div class="divider">ou</div>
+        <div class="social-login">
+            <button class="social-btn" id="googleLogin" type="button" title="Login com Google">
+                <svg viewBox="0 0 24 24"><g><path fill="#EA4335" d="M12 10.8v3.4h4.8c-.2 1.2-1.4 3.5-4.8 3.5-2.9 0-5.3-2.4-5.3-5.3s2.4-5.3 5.3-5.3c1.7 0 2.8.7 3.4 1.3l2.3-2.3C16.2 4.7 14.3 3.8 12 3.8 7.6 3.8 4 7.4 4 11.8s3.6 8 8 8c4.6 0 7.6-3.2 7.6-7.7 0-.5-.1-.9-.2-1.3H12z"/><path fill="#34A853" d="M12 20c2.6 0 4.7-.9 6.3-2.4l-3-2.4c-.8.5-1.8.8-3.3.8-2.5 0-4.6-1.7-5.3-4h-3v2.5C4.7 18.1 8.1 20 12 20z"/><path fill="#4A90E2" d="M6.7 13.6c-.2-.5-.3-1-.3-1.6s.1-1.1.3-1.6v-2.5h-3C3.2 10.2 4.7 13.1 6.7 13.6z"/><path fill="#FBBC05" d="M20.7 12.2c0-.4-.1-.8-.2-1.2H12v3.4h4.8c-.2</button> 1.2-1.4 3.5-4.8 3.5-2.9 0-5.3-2.4-5.3-5.3s2.4-5.3 5.3-5.3c1.7 0 2.8.7 3.4 1.3l2.3-2.3C16.2 4.7 14.3 3.8 12 3.8 7.6 3.8 4 7.4 4 11.8s3.6 8 8 8c4.6 0 7.6-3.2 7.6-7.7z"/></g></svg>
+                Google
+            </button>
+            <button class="social-btn" id="linkedinLogin" type="button" title="Login com LinkedIn">
+                <svg viewBox="0 0 24 24"><path fill="#0077B5" d="M19 0h-14c-2.76 0-5 2.24-5 5v14c0 2.76 2.24 5 5 5h14c2.76 0 5-2.24 5-5v-14c0-2.76-2.24-5-5-5zm-11 19h-3v-9h3v9zm-1.5-10.28c-.97 0-1.75-.79-1.75-1.75s.78-1.75 1.75-1.</svg>75 1.75.79 1.75 1.75-.78 1.75-1.75 1.75zm13.5 10.28h-3v-4.5c0-1.08-.02-2.47-1.5-2.47-1.5 0-1.73 1.17-1.73 2.39v4.58h-3v-9h2.88v1.23h.04c.4-.75 1.38-1.54 2.84-1.54 3.04 0 3.6 2 3.6 4.59v4.72z"/></svg>
+                LinkedIn
+            </button>
+            <button class="social-btn" id="facebookLogin" type="button" title="Login com Facebook">
+                <svg viewBox="0 0 24 24"><path fill="#1877F3" d="M22.675 0h-21.35C.595 0 0 .592 0 1.326v21.348C0 23.408.595 24 1.325 24h11.495v-9.294H9.692v-3.622h3.128V8.413c0-3.1 1.893-4.788 4.659-4.788 1.325 0 2.463.099 2.797.143v3.24l-1.918.001c-1.504 0-1.797.715-1.797 1.763v2.313h3.587l-.467 3.622h-3.12V24h6.116C23.406 24 24 23.408 24 22.674V1.32</button>6C24 .592 23.406 0 22.675 0"/></svg>
+                Facebook
+            </button>
+            <button class="social-btn" id="githubLogin" type="button" title="Login com GitHub">
+                <svg viewBox="0 0 24 24"><path fill="#181717" d="M12 .297c-6.63 0-12 5.373-12 12 0 5.303 3.438 9.8 8.205 11.387.6.113.82-.258.82-.577 0-.285-.01-1.04-.015-2.04-3.338.724-4.042-1.61-4.042-1.61-.546-1.387-1.333-1.756-1.333-1.756-1.089-.745.084-.729.084-.729 1.205.084 1.84 1.236 1.84 1.236 1.07 1.834 2.809 1.304 3.495.997.108-.775.418-1.305.762-1.605-2.665-.305-5.466-1.334-5.466-5.931 0-1.31.469-2.381 1.236-3.221-.124-.303-.535-1.523.117-3.176 0 0 1.008-.322 3.301 1.23.957-.266 1.983-.399 3.003-.404 1.02.005 2.047.138 3.006.404 2.291-1.553 3.297-1.23 3.297-1.23.653 1.653.242 2.873.119 3.176.77.84 1.235 1.</button>911 1.235 3.221 0 4.609-2.803 5.624-5.475 5.921.43.372.823 1.102.823 2.222 0 1.606-.014 2.898-.014 3.293 0 .322.218.694.825.576C20.565 22.092 24 17.592 24 12.297c0-6.627-5.373-12-12-12"/></svg>
+                GitHub
+            </button>
+        </div>
+    </div>
+    <script>
+        document.getElementById('loginForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            alert('Login efetuado (simulação).');
+        });
+        document.getElementById('forgotLink').addEventListener('click', function(e) {
+            e.preventDefault();
+            alert('Link para recuperação de senha (simulação).');
+        });
+        document.getElementById('registerLink').addEventListener('click', function(e) {
+            e.preventDefault();
+            alert('Página de cadastro (simulação).');
+        });
+        document.getElementById('googleLogin').addEventListener('click', function() {
+            alert('Login com Google (simulação).');
+        });
+        document.getElementById('linkedinLogin').addEventListener('click', function() {
+            alert('Login com LinkedIn (simulação).');
+        });
+        document.getElementById('facebookLogin').addEventListener('click', function() {
+            alert('Login com Facebook (simulação).');
+        });
+        document.getElementById('githubLogin').addEventListener('click', function() {
+            alert('Login com GitHub (simulação).');
+        });
+    </script>
+</body>
+</html></button></button>

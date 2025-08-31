@@ -1,0 +1,230 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width,initial-scale=1.0" />
+    <title>Login Impactante - Glassmorphism</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css"/>
+    <style>
+        body, html {
+            height: 100%;
+            margin: 0;
+            font-family: 'Segoe UI', Arial, sans-serif;
+            overflow: hidden;
+        }
+        .bg-video {
+            position: fixed;
+            top: 0; left: 0;
+            width: 100vw; height: 100vh;
+            object-fit: cover;
+            z-index: 0;
+        }
+        .overlay {
+            position: fixed;
+            top: 0; left: 0;
+            width: 100vw; height: 100vh;
+            background: rgba(20, 20, 30, 0.5);
+            z-index: 1;
+            backdrop-filter: blur(2px);
+        }
+        .login-card {
+            position: relative;
+            z-index: 2;
+            max-width: 370px;
+            margin: 6vh auto;
+            background: rgba(40, 40, 60, 0.35);
+            border-radius: 22px;
+            box-shadow: 0 8px 32px 0 rgba(31,38,135,0.37);
+            backdrop-filter: blur(18px);
+            -webkit-backdrop-filter: blur(18px);
+            border: 1.5px solid rgba(255,255,255,0.18);
+            padding: 2.5rem 2rem 2rem 2rem;
+            display: flex;
+            flex-direction: column;
+            gap: 1.3rem;
+            animation: fadeIn 1.2s cubic-bezier(.23,1.01,.32,1) 0.2s both;
+        }
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(40px);}
+            to { opacity: 1; transform: translateY(0);}
+        }
+        .login-card h2 {
+            color: #fff;
+            text-align: center;
+            font-size: 2rem;
+            font-weight: 700;
+            letter-spacing: 1px;
+            margin-bottom: 0.5rem;
+        }
+        .input-group {
+            position: relative;
+            margin-bottom: 1.1rem;
+        }
+        .input-group input {
+            width: 100%;
+            padding: 0.85rem 1rem 0.85rem 2.8rem;
+            border-radius: 12px;
+            border: none;
+            background: rgba(255,255,255,0.07);
+            color: #fff;
+            font-size: 1rem;
+            outline: none;
+            transition: background 0.2s;
+            box-shadow: 0 2px 8px 0 rgba(31,38,135,0.07);
+        }
+        .input-group input:focus {
+            background: rgba(255,255,255,0.13);
+        }
+        .input-group .input-icon {
+            position: absolute;
+            left: 1rem;
+            top: 50%;
+            transform: translateY(-50%);
+            color: #a5b4fc;
+            font-size: 1.15rem;
+            pointer-events: none;
+        }
+        .social-login {
+            display: flex;
+            justify-content: center;
+            gap: 1.1rem;
+            margin: 0.7rem 0 0.2rem 0;
+        }
+        .social-btn {
+            width: 44px; height: 44px;
+            border-radius: 50%;
+            border: none;
+            background: rgba(255,255,255,0.13);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.3rem;
+            color: #fff;
+            cursor: pointer;
+            transition: background 0.18s, transform 0.18s;
+            box-shadow: 0 2px 8px 0 rgba(31,38,135,0.09);
+        }
+        .social-btn:hover {
+            background: rgba(129,140,248,0.25);
+            transform: scale(1.08);
+        }
+        .login-btn {
+            width: 100%;
+            padding: 0.95rem 0;
+            border: none;
+            border-radius: 14px;
+            font-size: 1.1rem;
+            font-weight: 600;
+            color: #fff;
+            background: linear-gradient(270deg, #6366f1, #a5b4fc, #6366f1);
+            background-size: 400% 400%;
+            box-shadow: 0 4px 24px 0 rgba(99,102,241,0.13);
+            cursor: pointer;
+            transition: box-shadow 0.18s;
+            position: relative;
+            overflow: hidden;
+            animation: gradientMove 5s ease-in-out infinite;
+        }
+        @keyframes gradientMove {
+            0% {background-position: 0% 50%;}
+            50% {background-position: 100% 50%;}
+            100% {background-position: 0% 50%;}
+        }
+        .login-btn:active {
+            box-shadow: 0 2px 8px 0 rgba(99,102,241,0.18);
+        }
+        .login-card .divider {
+            text-align: center;
+            color: #b3b3c9;
+            font-size: 0.95rem;
+            margin: 0.7rem 0 0.2rem 0;
+            position: relative;
+        }
+        .login-card .divider:before,
+        .login-card .divider:after {
+            content: "";
+            position: absolute;
+            top: 50%;
+            width: 40%;
+            height: 1px;
+            background: rgba(255,255,255,0.13);
+        }
+        .login-card .divider:before { left: 0; }
+        .login-card .divider:after { right: 0; }
+        .forgot-link {
+            color: #a5b4fc;
+            text-decoration: none;
+            font-size: 0.97rem;
+            text-align: right;
+            display: block;
+            margin-top: -0.7rem;
+            margin-bottom: 0.2rem;
+            transition: color 0.15s;
+        }
+        .forgot-link:hover {
+            color: #818cf8;
+            text-decoration: underline;
+        }
+        @media (max-width: 600px) {
+            .login-card {
+                margin: 3vh 1vw;
+                padding: 1.5rem 0.7rem 1.2rem 0.7rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Vídeo de fundo (exemplo: partículas) -->
+    <video class="bg-video" autoplay muted loop playsinline>
+        <source src="https://www.videvo.net/videvo_files/converted/2016_08/preview/160710_06_Particles_4k_001.mp4" type="video/mp4">
+        Seu navegador não suporta vídeo em background.
+    </video>
+    <div class="overlay"></div>
+    <form class="login-card" autocomplete="on" onsubmit="return handleLogin(event)">
+        <h2>Login</h2>
+        <div class="input-group">
+            <span class="input-icon"><i class="fa-solid fa-envelope"></i></span>
+            <input type="email" id="email" placeholder="E-mail" required autocomplete="username" />
+        </div>
+        <div class="input-group">
+            <span class="input-icon"><i class="fa-solid fa-lock"></i></span>
+            <input type="password" id="password" placeholder="Senha" required autocomplete="current-password" />
+        </div>
+        <a href="#" class="forgot-link">Esqueceu a senha?</a>
+        <button type="submit" class="login-btn" id="loginBtn">
+            Entrar
+        </button>
+        <div class="divider">ou entre com</div>
+        <div class="social-login">
+            <button class="social-btn" type="button" title="Google" onclick="socialAuth('Google')">
+                <i class="fa-brands fa-google"></i>
+            </button>
+            <button class="social-btn" type="button" title="Facebook" onclick="socialAuth('Facebook')">
+                <i class="fa-brands fa-facebook-f"></i>
+            </button>
+            <button class="social-btn" type="button" title="GitHub" onclick="socialAuth('GitHub')">
+                <i class="fa-brands fa-github"></i>
+            </button>
+        </div>
+    </form>
+    <script>
+        function handleLogin(e) {
+            e.preventDefault();
+            const btn = document.getElementById('loginBtn');
+            btn.disabled = true;
+            const original = btn.innerHTML;
+            btn.innerHTML = `<i class="fa fa-spinner fa-spin"></i> Entrando...`;
+            setTimeout(() => {
+                btn.innerHTML = original;
+                btn.disabled = false;
+                alert('Login simulado! (adicione sua lógica de autenticação)');
+            }, 1800);
+            return false;
+        }
+        function socialAuth(provider) {
+            alert('Autenticação social simulada: ' + provider);
+            // Aqui você pode integrar OAuth real.
+        }
+    </script>
+</body>
+</html>
