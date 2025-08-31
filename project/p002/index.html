@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Início • Deyyymore</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="styles.css" />
+</head>
+<body data-page="home">
+  <nav class="nav">
+    <div class="brand"><div class="logo">⚡</div> Deyyymore</div>
+    <div class="nav-actions">
+      <div class="search"><input placeholder="Buscar..." /></div>
+      <label style="display:flex; align-items:center; gap:8px; color:var(--muted); font-size:13px">
+        Claro <input class="theme-switch" type="checkbox" /> Escuro
+      </label>
+      <div class="avatar">DM</div>
+    </div>
+  </nav>
+
+  <main class="container">
+    <section class="card hero">
+      <div>
+        <h1>Olá, bem-vindo à sua área</h1>
+        <p>Este é o menu inicial do seu projeto: navegue para Login ou Cadastro, ou explore os módulos.</p>
+        <div class="cta">
+          <a class="btn" href="login.html">Entrar</a>
+          <a class="btn sec" href="cadastro.html">Criar conta</a>
+        </div>
+      </div>
+      <div>
+        <div class="card" style="padding:20px; min-width:280px">
+          <h3 style="margin-top:0">Status</h3>
+          <ul style="margin:0; padding-left:18px; line-height:1.8; color:var(--muted)">
+            <li>Tema persistente (localStorage)</li>
+            <li>UI responsiva</li>
+            <li>Componentes reutilizáveis</li>
+          </ul>
+        </div>
+      </div>
+    </section>
+
+    <section class="cards">
+      <div class="row grid-3">
+        <a class="menu-card" href="login.html">
+          <div class="menu-icon">🔐</div>
+          <div class="menu-content">
+            <h3>Autenticação</h3>
+            <p>Faça login com validação e feedback visual.</p>
+          </div>
+        </a>
+        <a class="menu-card" href="cadastro.html">
+          <div class="menu-icon">📝</div>
+          <div class="menu-content">
+            <h3>Cadastro</h3>
+            <p>Crie sua conta com confirmação de senha.</p>
+          </div>
+        </a>
+        <a class="menu-card" href="#">
+          <div class="menu-icon">📊</div>
+          <div class="menu-content">
+            <h3>Relatórios</h3>
+            <p>Área exemplo para você plugar seu dashboard.</p>
+          </div>
+        </a>
+      </div>
+    </section>
+  </main>
+
+  <footer>© 2025 Deyyymore — UI kit de exemplo</footer>
+  <div class="toast" role="status" aria-live="polite"></div>
+  <script src="app.js" defer></script>
+</body>
+</html>

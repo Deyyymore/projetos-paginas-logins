@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Login • Deyyymore</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="styles.css" />
+</head>
+<body data-page="login">
+  <nav class="nav">
+    <div class="brand"><div class="logo">🔐</div> Login</div>
+    <div class="nav-actions">
+      <label style="display:flex; align-items:center; gap:8px; color:var(--muted); font-size:13px">
+        Claro <input class="theme-switch" type="checkbox" /> Escuro
+      </label>
+      <a class="btn sec" href="index.html">Voltar ao início</a>
+    </div>
+  </nav>
+
+  <main class="container">
+    <form id="loginForm" class="card form" novalidate>
+      <h2>Entre na sua conta</h2>
+      <p style="color:var(--muted); margin:0">Use <b>demo@deyyymore.com</b> e <b>Senha@123</b> para simular sucesso.</p>
+
+      <div class="group">
+        <label for="email">E-mail</label>
+        <div class="control">
+          <input id="email" name="email" type="email" placeholder="voce@exemplo.com" autocomplete="email" required />
+        </div>
+      </div>
+
+      <div class="group">
+        <label for="password">Senha</label>
+        <div class="control inline">
+          <input id="password" name="password" type="password" placeholder="••••••••" autocomplete="current-password" required minlength="6" />
+          <button class="btn sec" type="button" id="togglePwd">Mostrar</button>
+        </div>
+        <div class="strength"><div class="bar" id="pwdBar"></div></div>
+        <div id="capsHint" style="display:none" class="caps-hint">Caps Lock ativo</div>
+      </div>
+
+      <div class="meta">
+        <label><input type="checkbox" id="remember" /> Lembrar e-mail</label>
+        <a href="#" onclick="alert('Recuperação de senha não implementada neste demo.')">Esqueci minha senha</a>
+      </div>
+
+      <div class="inline" style="margin-top:16px">
+        <button class="btn" id="submitBtn" type="submit">Entrar</button>
+        <a class="btn sec" href="cadastro.html">Criar conta</a>
+      </div>
+
+      <div class="status" id="status"><span class="dot" id="statusDot"></span><span id="statusText"></span></div>
+    </form>
+  </main>
+
+  <footer>© 2025 Deyyymore — UI kit de exemplo</footer>
+  <div class="toast" role="status" aria-live="polite"></div>
+  <script src="app.js" defer></script>
+</body>
+</html>
