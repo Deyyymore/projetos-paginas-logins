@@ -1,0 +1,63 @@
+<!doctype html>
+<html lang="pt-br">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Login Simples</title>
+  <link rel="icon" href="../assets/favicon.png" />
+  <style>
+    :root {
+      --bg: #f5f7fb;
+      --card: #fff;
+      --text: #111827;
+      --muted: #6b7280;
+      --primary: #2563eb;
+      --radius: 16px;
+    }
+    * { box-sizing: border-box; }
+    body {
+      margin: 0; font-family: system-ui, -apple-system, Segoe UI, Roboto, Ubuntu;
+      background: var(--bg); color: var(--text); min-height: 100dvh;
+      display: grid; place-items: center; padding: 24px;
+    }
+    .card {
+      width: 100%; max-width: 420px; background: var(--card);
+      border-radius: var(--radius);
+      box-shadow: 0 10px 30px rgba(0,0,0,.08);
+      padding: 28px 28px 32px;
+    }
+    h1 { margin: 0 0 16px; font-size: 1.5rem; }
+    label { display:block; font-size: .9rem; color: var(--muted); margin: 14px 0 8px; }
+    input {
+      width: 100%; padding: 12px 14px; border: 1px solid #e5e7eb; border-radius: 10px;
+      font-size: 1rem; outline: none; background: #fff;
+    }
+    input:focus { border-color: var(--primary); box-shadow: 0 0 0 3px rgba(37,99,235,.15); }
+    button {
+      width: 100%; margin-top: 18px; padding: 12px 14px; border: 0; border-radius: 10px;
+      background: var(--primary); color: #fff; font-weight: 600; cursor: pointer;
+    }
+    .hint { margin-top: 10px; font-size: .85rem; color: var(--muted); text-align: center; }
+    .preview { margin-bottom: 14px; border-radius: 12px; overflow: hidden; }
+    .preview img { display:block; width:100%; height:auto; }
+  </style>
+</head>
+<body>
+  <main class="card" aria-label="Cartão de login simples">
+    <div class="preview">
+      <img src="../assets/log-simples.png" alt="Preview login simples">
+    </div>
+    <h1>Login Simples</h1>
+    <form onsubmit="event.preventDefault(); alert('Bem-vindo!')">
+      <label for="email">Email</label>
+      <input id="email" type="email" placeholder="email@exemplo.com" required />
+
+      <label for="senha">Senha</label>
+      <input id="senha" type="password" placeholder="••••••••" required />
+
+      <button type="submit">Entrar</button>
+    </form>
+    <p class="hint">Exemplo básico para estudos e clonagem rápida.</p>
+  </main>
+</body>
+</html>
